@@ -1,4 +1,4 @@
-package petrinet.analyses.transformations;
+package petrinet.analysis.transformations;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

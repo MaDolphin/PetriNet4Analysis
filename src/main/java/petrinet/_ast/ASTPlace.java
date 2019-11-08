@@ -13,8 +13,8 @@ public class ASTPlace extends ASTPlaceTOP {
         super();
     }
 
-    public ASTPlace(List<ASTFromEdge> outEdges, List<ASTToEdge> inEdges, String name, @SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<ASTIntLiteral> initial) {
-        super(outEdges, inEdges, name, initial);
+    public ASTPlace(List<ASTFromEdge> outEdges, List<ASTToEdge> inEdges, @SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<ASTIntLiteral> initial, String name) {
+        super(outEdges, inEdges, initial, name);
     }
 
     /**

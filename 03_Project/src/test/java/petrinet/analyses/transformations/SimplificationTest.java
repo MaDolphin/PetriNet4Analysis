@@ -1,4 +1,4 @@
-package petrinet.analyses.transformations;
+package petrinet.analysis.transformations;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -6,9 +6,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import petrinet._ast.ASTPetrinet;
 import petrinet._ast.ASTTransition;
 import petrinet._symboltable.TransitionSymbol;
-import petrinet.analyses.AbstractAnalysisTest;
-import petrinet.analyses.Boundedness;
-import petrinet.analyses.Liveness;
+import petrinet.analysis.AbstractAnalysisTest;
+import petrinet.analysis.Boundedness;
+import petrinet.analysis.Liveness;
 import petrinet.prettyprint.PetrinetPrettyPrinter;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package petrinet.analyses;
+package petrinet.analysis;
 
 /**
  * A representation of the number of tokens in a place

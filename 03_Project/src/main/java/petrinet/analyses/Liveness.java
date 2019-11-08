@@ -1,4 +1,4 @@
-package petrinet.analyses;
+package petrinet.analysis;
 
 import de.se_rwth.commons.logging.Log;
 import petrinet._ast.ASTTransition;

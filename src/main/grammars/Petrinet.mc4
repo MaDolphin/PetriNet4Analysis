@@ -24,10 +24,12 @@ grammar Petrinet extends de.monticore.literals.Literals {
     enum LivenessLevel = "l0live" | "l1live";
     TransitionReference = transition:Name@Transition;
 
-    symbol Place = "place" Name ("initial" initial:IntLiteral)? ";";
+    interface PetriNode = Name;
+
+    symbol Place implements PetriNode = "place" Name ("initial" initial:IntLiteral)? ";";
     astrule Place = outEdge:FromEdge* inEdge:ToEdge*;
 
-    symbol Transition = "transition" Name ":" (FromEdge | ToEdge)*;
+    symbol Transition implements PetriNode = "transition" Name ":" (FromEdge | ToEdge)*;
 
     abstract Edge = count:IntLiteral place:Name@Place;
     FromEdge extends Edge = count:IntLiteral "<-" place:Name@Place;

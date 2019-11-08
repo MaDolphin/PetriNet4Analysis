@@ -1,4 +1,4 @@
-package petrinet.analyses;
+package petrinet.analysis;
 
 import de.monticore.io.paths.ModelPath;
 import de.monticore.symboltable.GlobalScope;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractAnalysisTest {
 
-    private static final String modelPath = "src/test/resources/analyses/";
+    private static final String modelPath = "src/test/resources/analysis/";
 
     private static PetrinetLanguage language;
     private static ResolvingConfiguration resolve;

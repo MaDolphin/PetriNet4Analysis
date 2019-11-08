@@ -1,4 +1,4 @@
-package petrinet.analyses;
+package petrinet.analysis;
 
 /**
  * A value representing infinitely many (or arbitrarily many) tokens in a single place.

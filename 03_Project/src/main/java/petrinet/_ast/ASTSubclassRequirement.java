@@ -1,6 +1,6 @@
 package petrinet._ast;
 
-import petrinet.analyses.Subclass;
+import petrinet.analysis.Subclass;
 
 import java.util.Optional;
 
