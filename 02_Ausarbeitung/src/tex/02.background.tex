@@ -1,0 +1,519 @@
+% TeX root = ../../paper.tex
+
+\section{Background}\label{sec:background}
+
+We assume that the reader is familiar with the basic concept of a petri net. Nevertheless, we quickly introduce the fundamentals in this chapter. Our modeling language supports evaluation of a number of properties which we define here and describe their analysis using \emph{coverability trees}. Afterwards, we prove correctness of the transformations used to simplify models.
+
+\subsection{Petri Nets}\label{sec:background:definition}
+
+We begin by recalling the syntax and semantics of a petri net, which is fundamental to our work; we refer to Figure~\ref{fig:background:example} for an example.
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}
+		\node [place,label=above:$p_1$] (p1) {};
+		\node [place,tokens=1,below=2cm of p1,label=below:$p_2$] (p2) {};
+		\node [place,right=2cm of p2,label=below:$p_3$] (p3) {};
+		
+		\node [transition,below of=p1,xshift=-6.5mm,label=left:$t_1$] (t1) {}
+			edge[pre] (p1) edge[post] (p2);
+		\node [transition,below of=p1,xshift=6.5mm,label=right:$t_2$] (t2) {}
+			edge[pre] (p2) edge[post] (p1) edge[post] (p3);
+		\node [transition,left=1.2cm of t1,label=above:$t_3$,rotate=90,shift={(4mm,0)}] (t3) {}
+			edge[pre] (p1) edge[pre] (p2);
+		\node [transition,right of=p2,label=left:$t_4$,rotate=90] (t4) {}
+			edge[pre] (p2) edge[post] (p3);
+	\end{tikzpicture}
+	\caption{A petri net with places $P=\left\{p_1,p_2,p_3\right\}$ and transitions $T=\left\{t_1,t_2,t_3,t_4\right\}$. The initial marking contains a single token in $p_2$.}\label{fig:background:example}
+\end{figure}
+
+For our purposes, a \emph{petri net} $N=(P,T,E,W)$ is defined by
+\begin{itemize}
+    \item a set $P$ of places
+    \item a set $T$ of transitions, disjoint from $P$
+    \item a set $E\subseteq\left(P\times T\right)\cup\left(T\times P\right)$ of directed edges
+    \item a set of positive integer edge weights $W=\left\{w_e:e\in E\right\}$ which may be empty~\cite{murata1989petri}.
+\end{itemize}
+
+In Figure~\ref{fig:background:example}, the places are $P=\left\{p_1,p_2,p_3\right\}$ and the transitions $T=\left\{t_1,t_2,t_3,t_4\right\}$. All edges are unit weight and described by arrows.
+
+If no weights are given, we assume that each edge has weight $1$; most of our analyses are restricted to unweighted (\emph{ordinary}) instances, since weights can be simulated by the addition of auxiliary places and transitions~\cite{murata1989petri}.
+
+We denote by $\rdot t\mathop{\mathrel:=}\left\{p\in P\mid (p,t)\in E\right\}$ the \emph{inputs} of a transition, and conversely by $t\rdot\mathop{\mathrel:=}\left\{p\in P\mid (t,p)\in E\right\}$ its \emph{outputs}. We define the incoming transitions $\rdot p$ and outgoing transitions $p\rdot$ of a place $p\in P$ analogously~\cite{murata1989petri}. For instance, in Figure~\ref{fig:background:example}, $\rdot t_3=\left\{p_1,p_2\right\}$ and $p\rdot_2=\left\{t_2,t_4\right\}$.
+
+Semantics are defined by annotating a petri net with \emph{markings} $M:P\rightarrow\mathbb{N}_0$ assigning a number of \emph{tokens} to each place. The \emph{initial} marking is usually defined with the petri net and referred to by $M_0$; in the case of Figure~\ref{fig:background:example} we have $M_0(p_2)=1$ and $M_0(p_1)=M_0(p_3)=0$ where the single token is illustrated by a dot.
+
+Transition $t$ is \emph{enabled} at a marking $M$ if $M(p)\ge w_{(p,t)}$ for all $p\in\rdot t$, i.e., if all inputs contain at least as many tokens as the corresponding edge weight. An enabled transition $t$ may \emph{fire} resulting in a new marking $M'$ such that
+\begin{itemize}
+    \item $M'(p)=M(p)$ for all $p\not\in\rdot t\cup t\rdot$
+    \item $M'(p)=M(p)-w_{(p,t)}$ for all $p\in\rdot t\setminus t\rdot$
+    \item $M'(p)=M(p)+w_{(t,p)}$ for all $p\in t\rdot\setminus\rdot t$
+    \item $M'(p)=M(p)-w_{(p,t)}+w_{(t,p)}$ for all $p\in\rdot t\cap t\rdot$.
+\end{itemize}
+
+Note that $M'$ is again a marking because edge weights are integers and $t$ may only fire if it is enabled, hence $M'(p)\ge 0$ for all $p\in P$.
+
+$t_1,\ldots,t_n$ is a \emph{sequence} of transitions from marking $M_0$ if, for $1\le i\le n$, transition $t_i$ is enabled in $M_{i-1}$ and $M_i$ is the marking obtained by firing $t_i$, and marking $M$ is \emph{reachable} from $M_0$ if there is a sequence of transitions from $M_0$ such that the resulting marking is $M$~\cite{murata1989petri}. In Figure~\ref{fig:background:example}, $t_2,t_1,t_4$ is a sequence of transitions resulting in marking $M$ with $M(p_3)=2$, $M(p_1)=M(p_2)=0$.
+
+\subsection{Properties of Petri Nets}\label{sec:background:properties}
+
+We now define several behavioral properties which are among the most widely used~\cite{murata1989petri} and which are crucial for the verification of models in software engineering, but also in other domains~\cite{chaouiya2007petri}.
+
+\subsubsection{Liveness}
+
+There are several ways to define liveness, resulting in levels \emph{l0-live} to \emph{l4-live}~\cite{murata1989petri}. Here, we restrict ourselves to l0- and l1-liveness.
+
+A transition $t\in T$ in a petri net is called \emph{live} (more precisely, l1-live) if there is a sequence of transitions $t_1,\ldots,t_n$ from the initial marking $M_0$ such that $t\in\left\{t_1,\ldots,t_n\right\}$. If $t$ is not live, it is \emph{dead} (l0-live).
+
+In Figure~\ref{fig:background:example}, transitions $t_1$, $t_2$ and $t_4$ are live. On the other hand, $t_3$ is dead because the token cannot be in $p_1$ and $p_2$ at the same time.
+
+For higher levels of liveness, stricter requirements are imposed, e.g., that a transition is live in any marking reachable from $M_0$.
+
+Clearly, liveness is an important property of petri nets that may easily reveal modeling errors or determine that certain desired events can (or cannot) occur.
+
+\subsubsection{Boundedness}
+
+While liveness is concerned with transitions, boundedness is a property of places. A place $p$ is \emph{$k$-bounded} if, after firing any sequence of transitions in the initial marking $M_0$, the number of tokens in $p$ in the resulting marking is at most $k$. If all $p\in P$ are $k$-bounded, we say that the whole petri net is $k$-bounded. If such a $k$ exists, the place (or petri net) is called \emph{bounded}~\cite{murata1989petri}.
+
+As a special case, safeness is defined as $1$-boundedness: a petri net is \emph{safe} if, for all reachable markings $M$ and places $p\in P$, we have $M(p)\le 1$.
+
+For instance, the net in Figure~\ref{fig:background:example} is unbounded: Firing $t_2$ and $t_1$ in alternating order results in arbitrarily many tokens in $p_3$. On the other hand, Figure~\ref{fig:intro:example2} shows the 3-bounded petri net discussed in the introduction.
+
+These properties can, for example, be used to verify models of exclusion protocols where only one process should be writing to memory at the same time: safeness ensures that only one process can be in a ``writing'' state at the same time. Similarly, boundedness is useful to model a buffer of finite size~\cite{murata1989petri}.
+
+\subsubsection{Subclasses}
+
+For certain applications, it may be useful to define subclasses of petri nets that have one or more restrictions on the connectivity between places and transitions. In our tool, we implement the classes defined by Murata~\cite{murata1989petri}; they are only defined for petri nets whose edges have weight $1$.
+
+\begin{itemize}
+    \item A \emph{state machine} is a petri net such that $\left|\rdot t\right|=\left|t\rdot\right|=1$ for all $t\in T$. This models an automaton whose current state corresponds to the place with a token, and transitions move the automaton to another state.
+    \item Conversely, a \emph{marked graph} is a petri net such that $\left|\rdot p\right|=\left|p\rdot\right|=1$ for all $p\in P$. This corresponds to a graph where places are edges and transitions are the nodes between them, which can be used to model concurrent behavior whose data flow is determined independent of the data \cite{commoner1971marked}.
+    \item A \emph{free-choice net} is a petri net where, for all $(p,t)\in E$, we have $\left|p\rdot\right|=1$ or $\left|\rdot t\right|=1$. This allows transitions to occur freely in that either none or all outgoing transitions of a place are enabled~\cite{desel2005free}.
+    \item An \emph{extended free-choice net} is a petri net where, for all $p_1,p_2\in P$ we have $p\rdot_1\cap p\rdot_2=\emptyset$ or $p\rdot_1=p\rdot_2$. This affords the same property as free-choice nets, but increases modeling flexibility~\cite{desel2005free}.
+    \item \emph{Asymmetric choice nets} further generalize extended free-choice nets by requiring that $p\rdot_1\cap p\rdot_2=\emptyset$, $p\rdot_1\subseteq p\rdot_2$, or $p\rdot_1\supseteq p\rdot_2$ for any two places $p_1,p_2\in P$.
+\end{itemize}
+
+Due to their limited power, these classes are simpler to analyze and allow the application of specialized theorems which do not hold for general petri nets. Desel and Esparza~\cite{desel2005free} describe many applications of free-choice nets: for instance, l4-liveness can be determined in polynomial time for state machines and marked graphs, while it is \textsf{coNP}-complete for free-choice (and more general) nets~\cite{desel2005free}.
+
+\subsection{Analysis of Petri Net Properties: Coverability Trees}\label{sec:background:covtree}
+
+In this section, we assume a fixed petri net $N=(P,T,E,W)$, and describe how to verify whether it satisfies the properties described in Section~\ref{sec:background:properties}. Clearly, the subclasses can be determined easily by verifying the respective relations on the model. Due to our fairly restricted selection of other properties (namely, liveness and boundedness) these can be verified using a common method, the \emph{coverability tree}. This section is based on the more detailed description by Murata~\cite{murata1989petri}. We assume some basic knowledge about graphs (in particular, trees), to be found in any introductory material~\cite{diestel1996graphentheorie}.
+
+We define a partial order $\le$ on markings by component-wise ordering, i.e. $M\le M'$ if $M(p)\le M'(p)$ for all $p\in P$. An important statement is the following simple lemma which immediately follows from the firing rule:
+
+\begin{lemma}[Monotonicity Lemma]\label{la:monotonicity}
+	If $M\le M'$ and $t\in T$ is enabled in $M$, then $t$ is enabled in $M'$, and the markings $M_t$ and $M'_t$ reached after firing $t$ satisfy $M_t\le M'_t$.
+\end{lemma}
+
+Our aim is to reflect all markings reachable in the net from its initial marking. This can be conveniently represented by a \emph{reachability tree} whose vertices are markings of the petri net. The tree's root is the initial marking $M_0$ and edges correspond to transitions: An edge corresponding to $t\in T$ leads to the marking that results from firing $t$. However, there may be infinitely many such markings; the coverability tree evades this scenario with two modifications~\cite{murata1989petri}:
+\begin{itemize}
+	\item Any vertex $v$ for which there is another vertex $v'$ with the same marking as $v$ on the path from the root to $v$ is not further expanded.
+	\item At any vertex $v$ with marking $M$ for which there is a vertex $v'$ with marking $M'$ on the path from the root to $v$ with $M'(p)\le M(p)$ for all $p\in P$, the marking $M(p)$ is replaced by a pseudo-marking $M_\omega$ defined by \[
+	M_\omega(p)=\begin{cases}
+	M(p),&\text{if }M(p)=M'(p)\\
+	\omega,&\text{if }M'(p)\lneq M(p).\\
+	\end{cases}
+	\]
+\end{itemize}
+
+Here, $\omega$ represents ``arbitrarily many'' tokens since Lemma~\ref{la:monotonicity} implies that the loop from $M'$ to $M$ could be repeated any number of times; the understanding is that $n\le\omega\le\omega$ and $\omega\pm n=\omega$ for all $n\in\mathbb{N}_0$.
+
+Figure~\ref{fig:background:tree} shows an example coverability tree for the net in Figure~\ref{fig:background:example}.
+
+For any petri net, the resulting tree is finite due to Dickson's Lemma~\cite{dickson1913finiteness} which states that $\le$ is a well-quasi-ordering, i.e.\ there is a finite set of minimal elements. This immediately leads to an algorithm for computing the coverability tree (cf.\ for instance~\cite{murata1989petri}), even though the output---and hence computation time---could be doubly exponential in the input size: consider the net where two transitions have a shared input place $p$ and distinct output places; its coverability tree has $2^{M_0(p)+1}-1$ nodes.
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}
+		\tikzset{node distance=1.8cm};
+		\node [treenode] (t1) {$0,1,0$};
+		\node [treenode,below right of=t1] (t2) {$1,0,1$}
+			edge[pre] node[midway,below left] {$t_2$} (t1);
+		\node [treenode,above right of=t1] (t3) {$0,0,1$}
+			edge[pre] node[midway,above left] {$t_4$} (t1);
+		\node [treenode,above right of=t2] (t4) {$0,1,\omega$}
+			edge[pre] node[midway,below right] {$t_1$} (t2);
+		\node [treenode,below right of=t4] (t5) {$1,0,\omega$}
+			edge[pre] node[midway,below left] {$t_2$} (t4);
+		\node [treenode,above right of=t4] (t6) {$0,0,\omega$}
+			edge[pre] node[midway,above left] {$t_4$} (t4);
+		\node [treenode,above right of=t5] (t7) {$0,1,\omega$}
+			edge[pre] node[midway,below right] {$t_1$} (t5);
+	\end{tikzpicture}
+	\caption{The coverability tree for the example in Figure~\ref{fig:background:example}. Markings are denoted by ``$M(p_1),M(p_2),M(p_3)$''.}\label{fig:background:tree}
+\end{figure}
+
+The construction described above immediately allows us to deduce several important results~\cite{murata1989petri}:
+
+\begin{theorem}
+	A transition $t\in T$ is live (l1-live) if and only if $t$ appears as an edge label in the coverability tree.
+\end{theorem}
+\begin{proof}
+	$t$ is live if and only if there is a sequence of transitions containing $t$. Any such sequence is represented by a path in the coverability tree since it is only cut off once the same marking repeats, and replacing token counts by $\omega$ does not prevent $t$ from appearing by Lemma~\ref{la:monotonicity}. Clearly, any path in the tree containing $t$ also corresponds to a valid sequence of transitions.
+\end{proof}
+
+\begin{theorem}
+	A place $p\in P$ is $k$-bounded if and only if $M(p)\le k$ for all markings $M$ in the coverability tree (recall $\omega\nleq k$ for any $k\in\mathbb{N}_0$).
+\end{theorem}
+\begin{proof}
+	If there is a path in the tree reaching $M(p)>k$, then there must be a sequence of transitions proving that $p$ is not $k$-bounded. Conversely, such a sequence would result in a marking $M$ in the tree for which $M(p)$ is an integer larger than $k$, or $\omega$.
+\end{proof}
+
+\begin{corollary}
+	A petri net is $k$-bounded (bounded, safe) if and only if $M(p)\le k$ ($M(p)\lneq\omega$, $M(p)\le1$) for all markings $M$ in the coverability tree and places $p\in P$.
+\end{corollary}
+
+It may seem as though deadlocks can also be determined from the coverability tree by checking whether all its markings have an enabled transition. However, this is not the case as $\omega$ may hide the fact that some token counts are interrelated: In Figure~\ref{fig:background:deadlock}, tokens in $p_3$ can only be created by removing them from $p_2$. However the coverability tree first determines $p_2$ to be unbounded and hence does not track its depletion when moving (arbitrarily many) tokens to $p_3$.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\begin{tikzpicture}
+			\node [place,tokens=1,label=above:$p_1$] (p1) {};
+			\node [place,right=2cm of p1,label=above:$p_2$] (p2) {};
+			\node [place,right=2cm of p2,label=above:$p_3$] (p3) {};
+			\node [transition,right of=p1,label=right:$t_1$,rotate=90] (t1) {}
+				edge[pre,bend left=30] (p1) edge[post,bend right=30] (p1) edge[post] (p2);
+			\node [transition,right of=p2,label=right:$t_2$,rotate=90] (t2) {}
+				edge[pre] (p2) edge[post] (p3);
+			\node [transition,below of=p2,label=right:$t_3$] (t3) {}
+				edge[pre] (p1) edge[pre] (p2) edge[pre] (p3);
+		\end{tikzpicture}
+		\caption{A petrinet with a deadlock.}
+	\end{subfigure}
+	\hspace{2cm}
+	\begin{subfigure}{0.35\textwidth}
+		\begin{tikzpicture}
+			\node [treenode] (t1) {$1,0,0$};
+			\node [treenode,below of=t1] (t2) {$1,\omega,0$}
+				edge[pre] node[midway,left] {$t_1$} (t1);
+			\node [treenode,below of=t2,xshift=-10mm] (t3) {$1,\omega,0$}
+				edge[pre] node[midway,above left] {$t_1$} (t2);
+			\node [treenode,below of=t2,xshift=10mm] (t4) {$1,\omega,\omega$}
+				edge[pre] node[midway,above right] {$t_2$} (t2);
+			\node [treenode,below of=t4,xshift=-15mm] (t5) {$1,\omega,\omega$}
+				edge[pre] node[midway,above left] {$t_1$} (t4);
+			\node [treenode,below of=t4] (t6) {$1,\omega,\omega$}
+				edge[pre] node[midway,left] {$t_2$} (t4);
+			\node [treenode,below of=t4,xshift=15mm] (t7) {$0,\omega,\omega$}
+				edge[pre] node[midway,above right] {$t_3$} (t4);
+			\node [treenode,below of=t7] (t8) {$0,\omega,\omega$}
+				edge[pre] node[midway,left] {$t_2$} (t7);
+		\end{tikzpicture}
+		\caption{The corresponding coverability tree; markings given by ``$M(p_1),M(p_2),M(p_3)$''}
+	\end{subfigure}
+	\caption{Deadlocks are not easy to detect in the coverability tree: $t_1,t_1,t_2,t_3$ results in a deadlock, but in all tree nodes a transition is possible.}\label{fig:background:deadlock}
+\end{figure}
+
+Hence, the coverability tree provides a way to analyze liveness, boundedness and safeness. It is \emph{total}---it always produces the correct result---but not necessarily efficient; Section~\ref{sec:impl:speed} provides an example of its running time. For subclasses defined in Section~\ref{sec:background:properties}, there may be more efficient algorithms which we do not consider in this work; we refer to~\cite{murata1989petri,desel2005free} for examples of this.
+
+\subsection{Transformations}\label{sec:background:transformations}
+
+In order to reduce petri net complexity and computation time for algorithms based on the coverability tree (Section~\ref{sec:background:covtree}), it is under certain circumstances possible to eliminate places or transitions altogether while preserving the semantics and also liveness, boundedness and safeness. We describe in more detail the transformations sketched by Murata~\cite{murata1989petri}; these are depicted in Figure~\ref{fig:background:transform}.
+
+\begin{figure}[htb]
+	\centering
+	\begin{subfigure}{0.25\textwidth}
+		\begin{tikzpicture}[scale=0.7]
+			\node [place,tokens=1] (fsp-p) {};
+			\node [place,tokens=2,below=2cm of fsp-p] (fsp-q) {};
+			\node [transition,below of=fsp-p] (fsp-t) {}
+				edge[pre] (fsp-p) edge[post] (fsp-q);
+			\coordinate [above=5mm of fsp-p,xshift=-4mm] (fsp-tp1) {}
+				edge[post] (fsp-p);
+			\coordinate [above=5mm of fsp-p,xshift=4mm] (fsp-tp2) {}
+				edge[post] (fsp-p);
+			\coordinate [above=5mm of fsp-q,xshift=-4mm] (fsp-tq1) {}
+				edge[post] (fsp-q);
+			\coordinate [above=5mm of fsp-q,xshift=4mm] (fsp-tq2) {}
+				edge[post] (fsp-q);
+			\coordinate [below=5mm of fsp-q,xshift=-4mm] (fsp-tq3) {}
+				edge[pre] (fsp-q);
+			\coordinate [below=5mm of fsp-q,xshift=4mm] (fsp-tq4) {}
+				edge[pre] (fsp-q);
+				
+			\node [right=0.3cm of fsp-t] (fsp-lab) {$\leadsto$};
+				
+			\node [place,tokens=3,right=0.3cm of fsp-lab] (fsp-r) {};
+			\coordinate [above=5mm of fsp-r,xshift=-8mm] (fsp-r1) {}
+				edge[post] (fsp-r);
+			\coordinate [above=5mm of fsp-r,xshift=-4mm] (fsp-r2) {}
+				edge[post] (fsp-r);
+			\coordinate [above=5mm of fsp-r,xshift=4mm] (fsp-r3) {}
+				edge[post] (fsp-r);
+			\coordinate [above=5mm of fsp-r,xshift=8mm] (fsp-r4) {}
+				edge[post] (fsp-r);
+			\coordinate [below=5mm of fsp-r,xshift=-4mm] (fsp-r5) {}
+				edge[pre] (fsp-r);
+			\coordinate [below=5mm of fsp-r,xshift=4mm] (fsp-r6) {}
+				edge[pre] (fsp-r);
+		\end{tikzpicture}
+		\caption{Fusion of Series Places}\label{fig:background:transform:fsp}
+	\end{subfigure}
+	\qquad
+	\begin{subfigure}{0.25\textwidth}
+		\begin{tikzpicture}[scale=0.7]
+			\node [place,tokens=2] (fpp-p) {};
+			\node [place,right of=fpp-p,tokens=1] (fpp-q) {};
+			\coordinate [above right=1.9cm and 2mm of fpp-p] (fpp-t1) {};
+			\coordinate [above left=1.9cm and 2mm of fpp-q] (fpp-t2) {};
+			\node [transition,above right=1.2cm and 0cm of fpp-p] (fpp-t) {}
+				edge[pre] (fpp-t1) edge[pre] (fpp-t2)
+				edge[post] (fpp-p) edge[post] (fpp-q);
+			\coordinate [below right=1.9cm and 2mm of fpp-p] (fpp-u1) {};
+			\coordinate [below left=1.9cm and 2mm of fpp-q] (fpp-u2) {};
+			\node [transition,below right=1.2cm and 0cm of fpp-p] (fpp-u) {}
+				edge[pre] (fpp-p) edge[pre] (fpp-q)
+				edge[post] (fpp-u1) edge[post] (fpp-u2);
+			
+			\node [right=0.3cm of fpp-q] (fpp-lab) {$\leadsto$};
+			
+			\node [place,tokens=1,right=0.3cm of fpp-lab] (fpp-r) {};
+			\coordinate [above left=1.7cm and 2mm of fpp-r] (fpp-x1) {};
+			\coordinate [above right=1.7cm and 2mm of fpp-r] (fpp-x2) {};
+			\node [transition,above of=fpp-r] (fpp-x) {}
+				edge[pre] (fpp-x1) edge[pre] (fpp-x2) edge[post] (fpp-r);
+			\coordinate [below left=1.7cm and 2mm of fpp-r] (fpp-y1) {};
+			\coordinate [below right=1.7cm and 2mm of fpp-r] (fpp-y2) {};
+			\node [transition,below of=fpp-r] (fpp-y) {}
+				edge[pre] (fpp-r) edge[post] (fpp-y1) edge[post] (fpp-y2);
+		\end{tikzpicture}
+		\caption{Fusion of Parallel Places}\label{fig:background:transform:fpp}
+	\end{subfigure}
+	\qquad\qquad
+	\begin{subfigure}{0.25\textwidth}
+		\begin{tikzpicture}[scale=0.7]
+			\node [place,tokens=1] (esp-p) {};
+			\coordinate [above left=1.55cm and 4mm of esp-p] (esp-t1) {};
+			\coordinate [above left=1.15cm and 4mm of esp-p] (esp-t2) {};
+			\coordinate [above right=1.55cm and 4mm of esp-p] (esp-t3) {};
+			\coordinate [above right=1.15cm and 4mm of esp-p] (esp-t4) {};
+			\node [transition,above=1.3cm of esp-p,xshift=1mm,rotate=90] (esp-t) {}
+				edge[pre,bend right=30] (esp-p) edge[post,bend left=30] (esp-p)
+				edge[pre] (esp-t1) edge[pre] (esp-t2)
+				edge[post] (esp-t3) edge[post] (esp-t4);
+				
+			\coordinate [below left=1.55cm and 4mm of esp-p] (esp-u1) {};
+			\coordinate [below left=1.15cm and 4mm of esp-p] (esp-u2) {};
+			\coordinate [below right=1.55cm and 4mm of esp-p] (esp-u3) {};
+			\coordinate [below right=1.15cm and 4mm of esp-p] (esp-u4) {};
+			\node [transition,below=1.3cm of esp-p,xshift=-1mm,rotate=90] (esp-u) {}
+				edge[pre,bend right=30] (esp-p) edge[post,bend left=30] (esp-p)
+				edge[pre] (esp-u1) edge[pre] (esp-u2)
+				edge[post] (esp-u3) edge[post] (esp-u4);
+			
+			\node [right=0.3cm of esp-p] (esp-lab) {$\leadsto$};
+			
+			\node [place,draw=none,fill=none,right=0.3cm of esp-lab] (esp-r) {};
+			\coordinate [above left=1.55cm and 4mm of esp-r] (esp-x1) {};
+			\coordinate [above left=1.15cm and 4mm of esp-r] (esp-x2) {};
+			\coordinate [above right=1.55cm and 4mm of esp-r] (esp-x3) {};
+			\coordinate [above right=1.15cm and 4mm of esp-r] (esp-x4) {};
+			\node [transition,above=1.3cm of esp-r,xshift=1mm,rotate=90] (esp-x) {}
+				edge[pre] (esp-x1) edge[pre] (esp-x2)
+				edge[post] (esp-x3) edge[post] (esp-x4);
+			
+			\coordinate [below left=1.55cm and 4mm of esp-r] (esp-y1) {};
+			\coordinate [below left=1.15cm and 4mm of esp-r] (esp-y2) {};
+			\coordinate [below right=1.55cm and 4mm of esp-r] (esp-y3) {};
+			\coordinate [below right=1.15cm and 4mm of esp-r] (esp-y4) {};
+			\node [transition,below=1.3cm of esp-r,xshift=-1mm,rotate=90] (esp-y) {}
+				edge[pre] (esp-y1) edge[pre] (esp-y2)
+				edge[post] (esp-y3) edge[post] (esp-y4);
+		\end{tikzpicture}
+		\caption{Elimination of Self-Loop Places}\label{fig:background:transform:esp}
+	\end{subfigure}
+	\qquad\qquad
+	\begin{subfigure}{0.25\textwidth}
+		\begin{tikzpicture}[scale=0.7]
+			\node [place] (fst-p) {};
+			\coordinate [above left=1.8cm and 2mm of fst-p] (fst-t1) {};
+			\coordinate [above right=1.8cm and 2mm of fst-p] (fst-t2) {};
+			\coordinate [above left=0.6cm and 2mm of fst-p] (fst-t3) {};
+			\coordinate [above right=0.6cm and 2mm of fst-p] (fst-t4) {};
+			\coordinate [below left=1.8cm and 2mm of fst-p] (fst-u1);
+			\coordinate [below right=1.8cm and 2mm of fst-p] (fst-u2);
+			\node [transition,above of=fst-p] (fst-t) {}
+				edge[post] (fst-p)
+				edge[pre] (fst-t1)
+				edge[pre] (fst-t2)
+				edge[post] (fst-t3)
+				edge[post] (fst-t4);
+			\node [transition,below of=fst-p] (fst-u) {}
+				edge[pre] (fst-p)
+				edge[post] (fst-u1)
+				edge[post] (fst-u2);
+				
+			\node [right=0.3cm of fst-p] (fst-lab) {$\leadsto$};
+			
+			\coordinate [above right=5mm and -2mm of fst-lab,xshift=0.925cm] (fst-r1);
+			\coordinate [above right=5mm and 2mm of fst-lab,xshift=0.925cm] (fst-r2);
+			\coordinate [below right=5mm and -8mm of fst-lab,xshift=0.925cm] (fst-r3);
+			\coordinate [below right=5mm and -4mm of fst-lab,xshift=0.925cm] (fst-r4);
+			\coordinate [below right=5mm and 4mm of fst-lab,xshift=0.925cm] (fst-r5);
+			\coordinate [below right=5mm and 8mm of fst-lab,xshift=0.925cm] (fst-r6);
+			
+			\node [transition,right=.5cm of fst-lab] (fst-r) {}
+				edge[pre] (fst-r1)
+				edge[pre] (fst-r2)
+				edge[post] (fst-r3)
+				edge[post] (fst-r4)
+				edge[post] (fst-r5)
+				edge[post] (fst-r6);
+		\end{tikzpicture}
+		\caption{Fusion of Series Transitions}\label{fig:background:transform:fst}
+	\end{subfigure}
+	\qquad
+	\begin{subfigure}{0.25\textwidth}
+		\begin{tikzpicture}[scale=0.7]
+			\node [place] (fpt-p) {};
+			\node [place,below=2cm of fpt-p] (fpt-q) {};
+			\node [transition,below left=1cm and 0mm of fpt-p] (fpt-t) {}
+				edge[pre] (fpt-p) edge[post] (fpt-q);
+			\node [transition,below right=1cm and 0mm of fpt-p] (fpt-u) {}
+				edge[pre] (fpt-p) edge[post] (fpt-q);
+			\coordinate [above left=5mm and 0mm of fpt-p] (fpt-p1) {}
+				edge[post] (fpt-p);
+			\coordinate [above right=5mm and 0mm of fpt-p] (fpt-p2) {}
+				edge[post] (fpt-p);
+			\coordinate [below left=5mm and 0mm of fpt-q] (fpt-q1) {}
+				edge[pre] (fpt-q);
+			\coordinate [below right=5mm and 0mm of fpt-q] (fpt-q2) {}
+				edge[pre] (fpt-q);
+			
+			\node [right=0.25cm of fpt-u] (fpt-lab) {$\leadsto$};
+			
+			\node [place,right=1.8cm of fpt-p] (fpt-x) {};
+			\node [place,right=1.8cm of fpt-q] (fpt-y) {};
+			\node [transition,below of=fpt-x] (fpt-z) {}
+				edge[pre] (fpt-x) edge[post] (fpt-y);
+			\coordinate [above left=5mm and 0mm of fpt-x] (fpt-x1) {}
+				edge[post] (fpt-x);
+			\coordinate [above right=5mm and 0mm of fpt-x] (fpt-x2) {}
+				edge[post] (fpt-x);
+			\coordinate [below left=5mm and 0mm of fpt-y] (fpt-y1) {}
+				edge[pre] (fpt-y);
+			\coordinate [below right=5mm and 0mm of fpt-y] (fpt-y2) {}
+				edge[pre] (fpt-y);
+			
+		\end{tikzpicture}
+		\caption{Fusion of Parallel Transitions}\label{fig:background:transform:fpt}
+	\end{subfigure}
+	\qquad\qquad
+	\begin{subfigure}{0.25\textwidth}
+		\begin{tikzpicture}[scale=0.7]
+			\node [place] (est-p) {};
+			\node [place,below=2.4cm of est-p] (est-q) {};
+			\node [transition,below=1.2cm of est-p,xshift=-1mm,rotate=90] (est-t) {}
+				edge[pre,bend left=30] (est-p) edge[post,bend right=30] (est-p)
+				edge[pre,bend right=30] (est-q) edge[post,bend left=30] (est-q);
+			\coordinate [below left=0mm and 5mm of est-p] (est-p1) {}
+				edge[post] (est-p);
+			\coordinate [above left=0mm and 5mm of est-p] (est-p2) {}
+				edge[post] (est-p);
+			\coordinate [below right=0mm and 5mm of est-p] (est-p3) {}
+				edge[pre] (est-p);
+			\coordinate [above right=0mm and 5mm of est-p] (est-p4) {}
+				edge[pre] (est-p);
+			\coordinate [below left=0mm and 5mm of est-q] (est-q1) {}
+				edge[post] (est-q);
+			\coordinate [above left=0mm and 5mm of est-q] (est-q2) {}
+				edge[post] (est-q);
+			\coordinate [below right=0mm and 5mm of est-q] (est-q3) {}
+				edge[pre] (est-q);
+			\coordinate [above right=0mm and 5mm of est-q] (est-q4) {}
+				edge[pre] (est-q);
+				
+			\node [below right=0.3cm and 0.6cm of est-t] (est-lab) {$\leadsto$};
+			
+			\node [place,right=1.4cm of est-p] (est-x) {};
+			\node [place,right=1.4cm of est-q] (est-y) {};
+			\coordinate [below left=0mm and 5mm of est-x] (est-x1) {}
+				edge[post] (est-x);
+			\coordinate [above left=0mm and 5mm of est-x] (est-x2) {}
+				edge[post] (est-x);
+			\coordinate [below right=0mm and 5mm of est-x] (est-x3) {}
+				edge[pre] (est-x);
+			\coordinate [above right=0mm and 5mm of est-x] (est-x4) {}
+				edge[pre] (est-x);
+			\coordinate [below left=0mm and 5mm of est-y] (est-y1) {}
+				edge[post] (est-y);
+			\coordinate [above left=0mm and 5mm of est-y] (est-y2) {}
+				edge[post] (est-y);
+			\coordinate [below right=0mm and 5mm of est-y] (est-y3) {}
+				edge[pre] (est-y);
+			\coordinate [above right=0mm and 5mm of est-y] (est-y4) {}
+				edge[pre] (est-y);
+		\end{tikzpicture}
+		\caption{Elimination of Self-Loop Transitions}\label{fig:background:transform:est}
+	\end{subfigure}
+	\caption{The six elementary transformations defined by Murata~\cite{murata1989petri}}\label{fig:background:transform}
+\end{figure}
+
+In each of the following lemmas, we describe how to apply the respective transformation to a given petri net $N=(P,T,E,W)$ where all edges have weight 1, and give sketches of proofs that the resulting net $N'$ is semantically equivalent to $N$. Generalizations to other weights are straightforward. Some requirements, e.g.\ disjointness of two sets of transitions or places, are only technical restrictions ensuring that edges remain unit weight and unique.
+
+\begin{lemma}[Fusion of Series Places]
+	Let $p_1,p_2\in P$ and $t\in T$ such that $\rdot t=\left\{p_1\right\}$, $t\rdot=\left\{p_2\right\}$, $p_1\rdot=\left\{t\right\}$ and $\rdot p_1\cap\rdot p_2=\emptyset$.
+	
+	$N'$ is obtained from $N$ by replacing $p_1$ and $p_2$ by a single place $p$ with $M_0(p)=M_0(p_1)+M_0(p_2)$, and removing $t$. Edges incident to $p_1$ and $p_2$ are linked to $p$ as in Figure~\ref{fig:background:transform:fsp}.
+\end{lemma}
+\begin{proof}
+	Whenever a token is present in $p_1$, it can immediately be used to fire $t$ (and nothing else). Hence we may assume that this happens immediately and tokens are directly moved to $p_2$ instead of $p_1$ in each incoming transition. If $p_2$ is $k$-bounded, then so is $p$.
+\end{proof}
+
+\begin{lemma}[Fusion of Parallel Places]
+	Let $p_1,p_2\in P$ such that $\rdot p_1=\rdot p_2$ and $p\rdot_1=p\rdot_2$. Assume w.l.o.g. that $M_0(p_1)\le M_0(p_2)$.
+	
+	$N'$ is obtained from $N$ by removing $p_2$ and all incident edges, shown in Figure~\ref{fig:background:transform:fpp}.
+\end{lemma}
+\begin{proof}
+	Both places' token counts increase and decrease simultaneously. Hence, the smaller one determines whether outgoing transitions are enabled; the other one is redundant.
+	
+	Clearly liveness, boundedness and safeness are preserved; the net could however become $k$-bounded if $p_2$ was not $k$-bounded, but $p_1$ is.
+\end{proof}
+
+\begin{lemma}[Elimination of Self-Loop Places]
+	Let $p\in P$ such that $\rdot p=p\rdot$, and $M_0(p)\ge 1$.
+	
+	$N'$ is obtained from $N$ by removing $p$ and all its incident edges, as shown in Figure~\ref{fig:background:transform:esp}.
+\end{lemma}
+\begin{proof}
+	Every transition that removes tokens from $p$ returns them immediately, hence $M(p)=1$ for all reachable markings $M$. Transitions $t$ with $p\in\rdot t$ are thus always enabled.
+	
+	Note that $k$-boundedness could hold after removing $p$, even if $M_0(p)>k$. In all other cases, boundedness and liveness are preserved.
+\end{proof}
+
+\begin{lemma}[Fusion of Series Transitions]
+	Let $t_1,t_2\in T$ and $p\in P$ such that $\rdot p=\left\{t_1\right\}$, $p\rdot=\left\{t_2\right\}$, $\rdot t_2=\left\{p\right\}$ and $t\rdot_1\cap t\rdot_2=\emptyset$.
+
+	$N'$ is obtained from $N$ by replacing $t_1$ and $t_2$ by a single transition $t$ and removing $p$. Edges incident to $t_1$ and $t_2$ are linked to $t$ as in Figure~\ref{fig:background:transform:fst}.
+\end{lemma}
+\begin{proof}
+	Whenever $t_1$ fires, a token appears in $p$ which can immediately be used to fire $t_2$ (and nothing else). Hence we may assume that this happens immediately; both $t_1$ and $t_2$ then fire simultaneously and they can be merged. The new transition is live iff $t_1$ was (iff $t_2$ was).
+
+	If there exists a $p'\in\rdot t_1$, then $p'$ being $k$-bounded implies that $p$ is $k$-bounded: W.l.o.g.\ assume that $M_0(p)=0$. If $p$ is not $k$-bounded, we can rearrange the transition sequence such that $t_1$ is fired $(k+1)$ times without firing $t_2$ in between; but then $p'$ must not be $k$-bounded. Hence, the new net is $k$-bounded if and only if the old one is.
+
+	On the contrary, if $\rdot t_1=\emptyset$, the new net may be bounded even though the old one is not; consider the case where the petri net consists only of $t_1,t_2,p$.
+\end{proof}
+
+\begin{lemma}[Fusion of Parallel Transitions]
+	Let $t_1,t_2\in T$ such that $\rdot t_1=\rdot t_2$ and $t\rdot_1=t\rdot_2$.
+
+	$N'$ is obtained from $N$ by removing $t_2$ and all incident edges, see Figure~\ref{fig:background:transform:fpt}.
+\end{lemma}
+\begin{proof}
+	$t_1$ is enabled if and only if $t_2$ is, and both have the same effect. Hence one is redundant.
+\end{proof}
+
+\begin{lemma}[Elimination of Self-Loop Transitions]
+	Let $t\in T$ such that $\rdot t=t\rdot$.
+	
+	$N'$ is obtained from $N$ by removing $t$ and all its incident edges, see Figure~\ref{fig:background:transform:est}.
+\end{lemma}
+\begin{proof}
+	Firing $t$ does not change the marking, because all removed tokens are immediately returned. Hence $t$ is redundant, independent of whether it is live or not.
+\end{proof}
+
+All of these six transformations can be (repeatedly) applied in any order to simplify the petri net and subsequent analyses; their applicability on a petri net can be easily verified and hence a feasible algorithm would be to try applying each of them until a fixed point has been reached.
+
+

@@ -1,0 +1,13 @@
+petrinet SelfLoopPlace1 {
+
+    place p_in_1;
+    place p_in_2;
+    place p_out_1;
+    place p_out_2;
+
+    transition t:
+        1 <- p_in_1
+        1 <- p_in_2
+        1 -> p_out_1
+        1 -> p_out_2
+}

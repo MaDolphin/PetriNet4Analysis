@@ -1,0 +1,24 @@
+petrinet Fig16 {
+
+    place P1 initial 1;
+    place P2;
+    place P3;
+
+    transition T0:
+        1 <- P1
+        1 <- P3
+
+    transition T1:
+        1 <- P1
+        1 -> P3
+
+    transition T2:
+        1 <- P2
+        1 <- P3
+        1 -> P3
+
+    transition T3:
+        1 <- P1
+        1 -> P1
+        1 -> P2
+}

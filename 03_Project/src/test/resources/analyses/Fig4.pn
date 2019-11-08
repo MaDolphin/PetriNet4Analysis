@@ -1,0 +1,44 @@
+petrinet Fig4 {
+
+    place p0c initial 1;
+    place p5c;
+    place p10c;
+    place p15c;
+    place p20c;
+
+    transition t0_5:
+        1 <- p0c
+        1 -> p5c
+
+    transition t0_10:
+        1 <- p0c
+        1 -> p10c
+
+    transition t5_10:
+        1 <- p5c
+        1 -> p10c
+
+    transition t5_15:
+        1 <- p5c
+        1 -> p15c
+
+    transition t10_15:
+        1 <- p10c
+        1 -> p15c
+
+    transition t10_20:
+        1 <- p10c
+        1 -> p20c
+
+    transition t15_20:
+        1 <- p15c
+        1 -> p20c
+
+    transition t20_0:
+        1 <- p20c
+        1 -> p0c
+
+    transition t15_0:
+        1 <- p15c
+        1 -> p0c
+}

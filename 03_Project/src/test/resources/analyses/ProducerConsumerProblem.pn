@@ -1,0 +1,29 @@
+petrinet producerConsumerProblem {
+    // https://www.tu-ilmenau.de/fileadmin/public/iks/files/lehre/ihs2/IHS2-9-Verhaltensmodellierung-Petrinetze-DFG-CFG-CDFG.pdf
+    // Similar to Fig12 from Mur89
+
+    place p1 initial 1;
+    place p2;
+    place p3;
+    place p4 initial 1;
+    place p5;
+
+    transition t1:
+    1 <- p1
+    1 -> p2
+
+    transition t2:
+    1 <- p2
+    1 -> p1
+    1 -> p3
+
+    transition t3:
+    1 <- p3
+    1 <- p4
+    1 -> p5
+
+    transition t4:
+    1 <- p5
+    1 -> p4
+
+}

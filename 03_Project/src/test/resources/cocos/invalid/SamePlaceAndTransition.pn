@@ -1,0 +1,9 @@
+petrinet SamePlaceAndTransition {
+    place P1;
+
+    transition Q:
+        2 <- P1
+
+    transition P1:
+        1 -> P1
+}

@@ -1,0 +1,186 @@
+% TeX root = ../../paper.tex
+
+\section{Implementation}\label{sec:implementation}
+
+The \emph{petrinets4analysis} language and toolkit was developed using the MontiCore Language Workbench~\cite{rumpe2017monticore}, a parser generator, development framework, and runtime environment specialized for the design of DSLs. We use the grammar in Listing~\ref{lst:language:grammar} as input for MontiCore, which creates in turn~\cite{rumpe2017monticore}
+\begin{itemize}
+	\item the parser for our \emph{petrinets4analysis} DSL (by invoking the ANTLR parser generator~\cite{parr1995antlr}), including symbol resolution for place and transition names,
+	\item classes for the AST's non-terminals, given in Figure~\ref{fig:language:ast-uml},
+	\item development infrastructure, such as code for visitors and generation.
+\end{itemize}
+
+\begin{figure}[htb]
+	\centering
+	\makebox[\textwidth][c]{
+		\begin{tikzpicture}
+		\umlclass[x=0,y=0.5]{ASTPetrinet}{
+			+ name : String
+		}{}
+		\umlsimpleclass[x=-2,y=-0.7,anchor=north]{ASTAssertion}
+		\umlHVaggreg[mult2=*,pos2=1.9]{ASTPetrinet}{ASTAssertion}
+		\umlclass[type=interface,x=-4,y=-2.8]{ASTRequirement}{}{
+			+ \emph{verify}(ASTPetrinet) : Optional<Boolean>
+		}
+		\umlHVaggreg[mult2=1,pos2=1.8]{ASTAssertion}{ASTRequirement}
+		\umlsimpleclass[x=-6,y=-4.5]{ASTGlobalRequirement}
+		\umlHVimpl[anchor2=-50]{ASTGlobalRequirement}{ASTRequirement}
+		\umlsimpleclass[x=-6,y=-5.5]{ASTSubclassRequirement}
+		\umlHVimpl[anchor2=-50]{ASTSubclassRequirement}{ASTRequirement}
+		\umlsimpleclass[x=-1,y=-5]{ASTLiveness}
+		\umlHVimpl[anchor2=-50]{ASTLiveness}{ASTRequirement}
+		\umlclass[x=4.7,y=-0.7,anchor=north]{ASTPlace}{
+			+ name : String
+		}{}
+		\umlHVaggreg[mult2=*,pos2=1.9]{ASTPetrinet}{ASTPlace}
+		\umlclass[x=1.7,y=-0.7,anchor=north]{ASTTransition}{
+			+ name : String
+		}{}
+		\umlHVaggreg[mult2=*,pos2=1.9]{ASTPetrinet}{ASTTransition}
+		\umlsimpleclass[x=0.8,y=-3,anchor=west]{ASTFromEdge}
+		\umlVHaggreg[pos2=1.8,anchor1=-150,attr2=|*]{ASTTransition}{ASTFromEdge}
+		\umlsimpleclass[x=0.8,y=-4,anchor=west]{ASTToEdge}
+		\umlVHaggreg[pos2=1.8,anchor1=-150,attr2=|*]{ASTTransition}{ASTToEdge}
+		\umlVHuniassoc[attr2=|*,anchor1=-100,anchor2=10,pos2=1.9]{ASTPlace}{ASTFromEdge}
+		\umlVHuniassoc[attr2=|*,anchor1=-100,anchor2=10,pos2=1.9]{ASTPlace}{ASTToEdge}
+		\umlsimpleclass[type=abstract,x=4,y=-4.8]{ASTEdge}
+		\umlHVuniassoc[attr2=|1,pos2=1.9,anchor2=-60]{ASTEdge}{ASTPlace}
+		\umlHVinherit[anchor1=-10]{ASTFromEdge}{ASTEdge}
+		\umlHVinherit[anchor1=-10]{ASTToEdge}{ASTEdge}
+		\umlsimpleclass[x=3,y=-5.8]{ASTIntLiteral}
+		\umlHVHaggreg[attr2=1|weight,align2=right,anchors=west and west,arm2=-1,pos2=2.9]{ASTEdge}{ASTIntLiteral}
+		\umlVHaggreg[attr2=0..1|initial,align2=left,anchor1=-35,pos2=1.9]{ASTPlace}{ASTIntLiteral}
+		\umlVHuniassoc[mult2=*,pos2=1.7,anchor1=25]{ASTLiveness}{ASTTransition}
+		\end{tikzpicture}
+	}
+	\caption{Structure of our AST's non-terminals}\label{fig:language:ast-uml}
+\end{figure}
+
+Hence, only language-specific additions such as analysis methods have to be implemented, resulting in a small handwritten codebase. Besides the AST and coco classes discussed in Section~\ref{sec:language}, we group our implementation in three major packages; Figure~\ref{fig:impl:uml} shows their interrelations.
+
+\begin{figure}[htb]
+	\centering
+	\makebox[\textwidth][c]{
+		\begin{tikzpicture}
+		\umlsimpleclass[x=0,y=0]{PetrinetsTool}
+		\umlemptypackage[x=-0.2,y=2]{cocos}
+		\umlVHVuniassoc{PetrinetsTool}{cocos}
+		\umlemptypackage[x=1.7,y=2,name=ast]{\_ast}
+		\umlVHVuniassoc[anchor1=30]{PetrinetsTool}{ast}
+		\begin{umlpackage}{prettyprint}
+		\umlsimpleclass[x=3,y=2,anchor=west]{PetrinetPrettyPrinter}
+		\umlsimpleclass[x=3,y=1,anchor=west]{PetrinetDotPrinter}
+		\end{umlpackage}
+		\umlHVHuniassoc[anchor1=10,arm1=1.3]{PetrinetsTool}{PetrinetPrettyPrinter}
+		\umlHVHuniassoc[anchor1=10,arm1=1.3]{PetrinetsTool}{PetrinetDotPrinter}
+		\umlsimpleclass[x=7.7,y=3]{IndentPrinter}
+		\umlHVinherit{PetrinetPrettyPrinter}{IndentPrinter}
+		\umlHVinherit{PetrinetDotPrinter}{IndentPrinter}
+		\begin{umlpackage}{transformations}
+		\umlsimpleclass[x=-3.5,y=1]{Transformation}
+		\umlsimpleclass[x=-3.5,y=2]{SimpleTransformations}
+		\umlVHVuniassoc{Transformation}{SimpleTransformations}
+		\end{umlpackage}
+		\umlVHuniassoc[anchor1=160]{PetrinetsTool}{Transformation}
+		\begin{umlpackage}{analyses}
+		\umlsimpleclass[x=-3,y=-1]{Subclass}
+		\umlsimpleclass[x=0,y=-1]{Liveness}
+		\umlsimpleclass[x=3,y=-1]{Boundedness}
+		\umlsimpleclass[x=1.3,y=-2.5]{CoverabilityTree}
+		\umlHVuniassoc{Liveness}{CoverabilityTree}
+		\umlHVuniassoc{Boundedness}{CoverabilityTree}
+		\umlnote[x=-2,y=-2.3,width=1.5cm]{Liveness}{Checker}
+		\umlnote[x=-2,y=-2.3,width=1.5cm]{Boundedness}{Checker}
+		\umlnote[x=-2,y=-2.3,width=1.5cm]{Subclass}{Checker}
+		\umlsimpleclass[x=4.3,y=-2.5]{Marking}
+		\umluniaggreg[mult2=1]{CoverabilityTree}{Marking}
+		\umlsimpleclass[x=7,y=-2.5]{TokenCount}
+		\umluniaggreg[mult2=*]{Marking}{TokenCount}
+		\umlsimpleclass[x=7,y=-1]{InfiniteTokenCount}
+		\umlinherit{InfiniteTokenCount}{TokenCount}
+		\umldep[anchor1=12,anchor2=-170]{CoverabilityTree}{InfiniteTokenCount}
+		\umldep{Boundedness}{InfiniteTokenCount}
+		\umldep[anchor2=165]{Boundedness}{TokenCount}
+		\umlVHVdep[anchor1=-12,anchor2=-165,arm1=-0.15]{CoverabilityTree}{TokenCount}
+		\end{umlpackage}
+		\umlHVHuniassoc{PetrinetsTool}{Subclass}
+		\umlVHVuniassoc{PetrinetsTool}{Liveness}
+		\umlHVuniassoc[anchor1=-10]{PetrinetsTool}{Boundedness}
+		\umldep{analyses}{ast}
+		\umldep{cocos}{ast}
+		\umlCNdep{transformations}{0.2,1.3}{ast}
+		\umldep{prettyprint}{ast}
+		\end{tikzpicture}
+	}
+	\caption{Class diagram for the analysis toolkit}\label{fig:impl:uml}
+\end{figure}
+
+\subsubsection{transformations}
+
+This package implements the six simple transformations introduced by Murata~\cite{murata1989petri} and described in Section~\ref{sec:background:transformations}. The \texttt{Transformation} class will apply them to a petri net until no more changes are possible.
+
+\subsubsection{analyses}
+
+In the analyses package, the coverability tree method (Section~\ref{sec:background:covtree}) is implemented for verifying liveness, safeness and boundedness. Additionally, subclasses (Section~\ref{sec:background:properties}) are defined and evaluated here.
+
+This package is intended as the main location for analysis code which can also be referred to from the AST classes.
+
+\subsubsection{prettyprint}
+
+We provide two printing classes both relying on MontiCore's built-in \texttt{IndentPrinter} visitor. The \texttt{PrettyPrinter} outputs a syntactically correct petri net which parses to the given AST representation and is formatted according to common guidelines (e.g.\ indentation and whitespace). 
+
+The \texttt{DotPrinter} allows transformation of the model into the popular graph description language \emph{Dot}~\cite{gansner2000open} for subsequent processing with other compatible tools. In particular, \emph{graphviz}~\cite{gansner2000open} could be used to draw the net with appropriate positioning.
+
+\subsection{Tool Functionality}
+
+In addition to the three given packages, the \texttt{PetrinetsTool} is the entry point for a command-line analysis application. After a petri net has been parsed and verified, it provides an interface to access the transformation, analysis, and printing functionality.
+
+For property verification, this mechanism is an alternative to the enforcement with assertions (cf.\ Section~\ref{sec:lang:semantics}), in the form of a query and result. Additionally, a short ``proof'' can be displayed, e.g. a transition sequence leading to violation of boundedness.
+
+\subsection{Transformations}\label{sec:impl:speed}
+
+The coverability tree introduced in Section~\ref{sec:background:covtree} provides an algorithm to determine liveness, boundedness and safeness. It is total, but not necessarily efficient. Hence, transformations are essential to speed up computation time.
+
+As an example, Figure~\ref{fig:impl:cookie} describes a cookie vending machine switching between a \emph{Selection} and \emph{Output} mode. After inserting a coin to get to \emph{Selection}, the customer can press the button ``+'' to select a number of cookies that will be taken from a supply and dispensed to the tray in \emph{Output} mode.
+
+The coverability tree computation for this petri net takes $6.42$s ($\pm0.49$s)\footnote{\label{fn:experiment}53 repetitions, first 3 discarded, 95\% confidence interval} on a local machine. This is because every ordering of \emph{Take Cookie}, \emph{Dispense} and steps in the \emph{Insert}--\emph{Accept Coin}--\emph{Change Mode} cycle need to be considered, leading to an exponential size in the number of tokens (``cookies'') in the supply.
+
+We perform the implemented transformations to remove \emph{Take Cookie}, \emph{Power}, and \emph{Insert}. This reduces the potential transition sequences and leads to a computation time---including transformations---of $0.92$s ($\pm0.06$s)\textsuperscript{\ref{fn:experiment}} on the same machine.
+
+\begin{figure}[htb]
+	\centering
+	\begin{tikzpicture}
+		\node [place,label=below:Selection] (sm) {};
+		\node [place,tokens=1,below of=sm,label=below:Output] (om) {};
+		\node [place,right=2cm of sm,label=above:Count] (c) {};
+		\node [transition,right of=sm,label=right:{Press ``+''},rotate=90] (bp) {}
+			edge[pre,bend left=30] (sm) edge[post,bend right=30] (sm)
+			edge[post] (c);
+		\node [place,below of=c,label=below:Tray] (t) {};
+		\node [place,tokens=4,below of=t,label=below:Supply] (s) {};
+		\node [place,tokens=1,below right=0.85cm and 0.85cm of om,label=below:Power] (p) {};
+		\node [transition,right of=om,label=below right:{\footnotemark[1]},rotate=90] (d) {}
+			edge[pre,bend left=30] (om) edge[post,bend right=30] (om)
+			edge[pre,bend left=15] (p) edge[post,bend right=15] (p)
+			edge[pre] (s) edge[post] (t) edge[pre,bend right=20] (c);
+		\node [transition,right of=t,label={[align=center]right:{Take\\Cookie}},rotate=90] (tk) {}
+			edge[pre] (t);
+		\node [place,left=2cm of sm,label=left:Cash] (cash) {};
+		\node [place,below of=cash,label=left:Coin] (slot) {};
+		\node [transition,left of=sm,rotate=90,label=right:{Accept Coin}] (acc) {}
+			edge[pre,bend right=20] (om) edge[post] (sm) edge[pre] (slot) edge[post] (cash);
+		\node [place,tokens=1,below left=0.85cm and 0.85cm of om,label=below:{Slot Open}] (so) {};
+		\node [transition,left of=so,rotate=45,label=above left:Insert] (in) {}
+			edge[pre] (so) edge[post] (slot);
+		\node [transition,left of=om,rotate=135,label=above:{\footnotemark[2]}] (mode) {}
+			edge[pre,bend left=30] (sm) edge[post] (om) edge[post] (so);
+	\end{tikzpicture}
+	\caption{A cookie vending machine, where transformations can provide a significant speed-up for analyses. Adapted from B. Koenig, \url{www.ti.inf.uni-due.de/fileadmin/public/teaching/mod/slides/ws201112/petri-2x2.pdf} \protect\footnotemark[1]Dispense \protect\footnotemark[2]Change Mode}\label{fig:impl:cookie}
+\end{figure}
+
+\subsection{Extensibility and Future Work}
+
+Our application is designed to be easily extensible to new analyses or transformations. Additional assertions are added as a grammar non-terminal implementing the \texttt{Requirement} interface. Hence, they will have to override the \texttt{verify} method which returns the verification result and reference appropriate methods in the \texttt{analyses} package.
+
+For instance, Murata describes a number of specialized theorems for properties such as higher liveness levels and reachability~\cite{murata1989petri}. Many of them only apply to petri nets with certain graph-theoretic properties, which could be realized by returning \texttt{Optional.empty()} if no theorem is applicable. Further we suggest implementing more efficient approaches to determine l1-liveness, safeness and boundedness, in particular for larger nets with relatively simple structure (e.g., Kemper and Bause~\cite{kemper1992efficient} describe a polynomial-time algorithm for free-choice nets).
+
+In terms of transformations, edge weights---which complicate analyses and other transformations---could be eliminated through the addition of intermediate places. Additionally, more intricate and more powerful transformations can be added to the \texttt{transformations} package, hence further simplifying input petri nets. 

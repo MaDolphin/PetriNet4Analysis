@@ -1,0 +1,27 @@
+petrinet Fig17a { //no boundedness, no reversibility, no liveness
+
+    place p1;
+    place p2 initial 1;
+    place p3;
+    place p4;
+
+    transition t1:
+        1 <- p3
+        1 <- p4
+        1 -> p2
+
+    transition t2:
+        1 <- p3
+        1 -> p4
+
+    transition t3:
+        1 <- p2
+        1 -> p1
+        1 -> p3
+
+    transition t4:
+        1 <- p1
+        1 <- p4
+        1 -> p1
+        1 -> p2
+}

@@ -1,0 +1,18 @@
+petrinet ExampleNet {
+
+    assert live;
+    assert bounded;
+
+    place Start initial 1;
+    place Next;
+    place Collect;
+
+    transition forward:
+        1 <- Start
+        1 -> Next
+        2 -> Collect
+
+    transition back:
+        1 <- Next
+        1 -> Start
+}

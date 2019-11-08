@@ -1,0 +1,33 @@
+petrinet CookieMachine {
+
+    place Keksspeicher initial 4;
+    place KeksZaehler;
+    place Einwurfschlitz initial 1;
+    place Signal;
+    place KeinSignal initial 1;
+    place Kasse;
+
+
+    transition MuenzeAkzeptieren:
+        1 <- Einwurfschlitz
+        1 <- KeinSignal
+        1 -> Signal
+        1 -> Kasse
+
+    transition KeksDruecken:
+        1 <- Signal
+        1 -> Signal
+        1 -> KeksZaehler
+
+    transition KekseAusgeben:
+        1 <- Signal
+        1 -> KeinSignal
+        1 -> Einwurfschlitz
+
+    transition KeksGeben:
+        1 <- KeinSignal
+        1 -> KeinSignal
+        1 <- KeksZaehler
+        1 <- Keksspeicher
+
+}

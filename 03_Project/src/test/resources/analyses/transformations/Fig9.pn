@@ -1,0 +1,39 @@
+petrinet Fig9 {
+
+    place ReadyToSend initial 1;
+    place WaitForAck;
+    place AckReceived;
+    place BufferFull1;
+    place BufferFull2;
+    place ReadyToReceive initial 1;
+    place MessageReceived;
+    place AckSent;
+
+    transition SendMessage:
+        1 <- ReadyToSend
+        1 -> WaitForAck
+        1 -> BufferFull1
+
+    transition ReceiveAck:
+        1 <- WaitForAck
+        1 <- BufferFull2
+        1 -> AckReceived
+
+    transition Process1:
+        1 <- AckReceived
+        1 -> ReadyToSend
+
+    transition ReceiveMessage:
+        1 <- ReadyToReceive
+        1 <- BufferFull1
+        1 -> MessageReceived
+
+    transition SendAck:
+        1 <- MessageReceived
+        1 -> BufferFull2
+        1 -> AckSent
+
+    transition Process2:
+        1 <- AckSent
+        1 -> ReadyToReceive
+}

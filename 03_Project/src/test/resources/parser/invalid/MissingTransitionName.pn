@@ -1,0 +1,8 @@
+petrinet MissingTransitionName {
+
+    place P;
+
+    transition:
+        1 <- P
+        P -> 1
+}

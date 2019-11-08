@@ -1,0 +1,7 @@
+petrinet MissingSemicolon {
+
+    place P
+
+    transition T:
+        1 <- P
+}

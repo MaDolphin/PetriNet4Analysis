@@ -1,0 +1,21 @@
+petrinet FCN {
+    // http://www.cs.rpi.edu/courses/spring04/dci/peterson.pdf Fig. 29
+
+    place p1;
+    place p2;
+    place p3;
+
+    transition t1:
+    1 <- p1
+    1 -> p2
+    1 -> p3
+
+    transition t2:
+    1 <- p1
+    1 -> p3
+
+    transition t3:
+    1 <- p2
+    1 <- p3
+
+}

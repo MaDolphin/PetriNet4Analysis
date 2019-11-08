@@ -1,0 +1,19 @@
+petrinet ExampleNet {
+
+    assert l1live(Start, Next);
+    assert bounded;
+    assert extended_free_choice;
+
+    place Start initial 1;
+    place Next;
+    place Collect;
+
+    transition forward:
+        1 <- Start
+        1 -> Next
+        2 -> Collect
+
+    transition back:
+        1 <- Next
+        1 -> Start
+}

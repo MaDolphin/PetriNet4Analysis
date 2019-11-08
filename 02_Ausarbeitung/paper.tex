@@ -1,0 +1,81 @@
+\documentclass[runningheads,envcountsect,envcountsame,a4paper]{lncs/llncs}
+
+\usepackage[a4paper,textwidth=12.6cm,textheight=20.5cm,heightrounded,hratio=1:1,vratio=3:5]{geometry}
+
+\usepackage{fontspec}
+\usepackage{luatexbase}
+\usepackage{microtype}
+
+\usepackage{textcomp}
+
+\usepackage{graphicx}
+\usepackage[bookmarksdepth=2,pdfauthor={Pascal Hein, Mario Fiestelmann, Stephanie Kinderreich},pdfsubject={A MontiCore Modelling Language for the Analysis of Petri Nets}]{hyperref}
+\pdfvariable minorversion=7
+\usepackage{listings}
+\usepackage{xcolor}
+\renewcommand\UrlFont{\color{blue}\rmfamily}
+\usepackage{float}
+
+\newfloat{lstfloat}{htb}{lop}
+\floatname{lstfloat}{Listing}
+\def\lstfloatautorefname{Listing}
+
+\lstdefinestyle{petrinet}{
+    keywordstyle=[2]{\color{blue}\bfseries},
+    otherkeywords={<-,->},
+    morekeywords={petrinet,assert,place,transition,initial},
+    morekeywords=[2]{<-,->}
+}
+\lstdefinestyle{mcgrammar}{
+    morekeywords={grammar,extends,scope,interface,astrule,method,enum,implements,symbol,abstract}
+}
+\lstset{frame=single,numbers=left,basicstyle=\scriptsize,literate={"}{\textquotedbl}1,escapeinside={/@}{@/}}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage{subcaption}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,snakes,automata,backgrounds,petri,positioning}
+\tikzset{node distance=1.3cm,>=stealth',bend angle=45,auto}
+\tikzstyle{place}=[circle,thick,draw=blue!75,fill=blue!20,minimum size=6mm]
+\tikzstyle{transition}=[rectangle,thick,draw=black!75,
+fill=black!20,minimum width=8mm,inner ysep=2pt]
+\tikzstyle{treenode}=[rectangle,thick,draw=blue!75,fill=blue!20,minimum size=6mm]
+
+\usepackage{tikz-uml}
+
+\newcommand\rdot{{}^\bullet}
+
+\hyphenation{co-ve-ra-bi-li-ty}
+
+\begin{document}
+
+\title{\emph{petrinets4analysis}: A Petri Net Modeling and Analysis Language Developed with MontiCore\thanks{Practical Project for the lecture ``Software Language Engineering'' by Prof.\ Dr.\ B.\ Rumpe. The authors are grateful to Imke Drave for her supervision of the project.}}
+\titlerunning{\emph{petrinets4analysis}: Petri Net Modeling with MontiCore}
+%\title{A MontiCore Modelling Language for the Analysis of Petri Nets\thanks{Practical Project for the lecture ``Software Language Engineering'' by Prof.\ Dr.\ B.\ Rumpe. The authors are grateful to Imke Drave for her supervision of the project.}}
+
+%\titlerunning{Abbreviated paper title}
+
+\author{Pascal Hein \and
+Mario Fiestelmann \and
+Stephanie Kinderreich}
+
+\authorrunning{P. Hein, M. Fiestelmann, S. Kinderreich}
+\institute{RWTH Aachen Unversity, Aachen, Germany \\ \email{\normalfont\{pascal.hein, mario.fiestelmann, stephanie.kinderreich\}@rwth-aachen.de}}
+
+\maketitle
+
+\input{src/tex/P1.abstract}
+\input{src/tex/01.intro}
+\input{src/tex/02.background}
+\input{src/tex/03.language}
+\input{src/tex/04.implementation}
+\input{src/tex/05.conclusion}
+
+\bibliography{src/bib/Literatur.bib}
+\bibliographystyle{lncs/splncs04}
+
+\end{document}

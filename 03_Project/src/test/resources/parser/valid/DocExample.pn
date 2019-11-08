@@ -1,0 +1,15 @@
+petrinet ExamplePetrinet {
+
+    /* C-style block comments
+     * may be used anywhere
+     * and span multiple lines.
+     */
+     
+    place P1 initial 1;
+    
+    transition t1: // this is a transition followed by a line-comment
+        1 <- P1
+        1 -> P2
+        
+    place P2; // places may also come after transitions referencing them
+}

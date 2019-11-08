@@ -1,0 +1,84 @@
+% TeX root = ../../paper.tex
+
+\section{Introduction}
+
+% Die Logos sind veraltet und duerfen zurzeit nicht verwendet werden!
+% Auf Seite \pageref{Logo} in Abbildung \ref{Logo} befindet sich das SE Logo.
+
+Petri nets are a well-established and powerful language frequently used for modeling asynchronous or non-deterministic processes in software as well as in industrial settings, e.g.\ the design of integrated computing modules~\cite{yakovlev1996petri}. Furthermore, other application domains such as biology and chemistry also make use of these models~\cite{chaouiya2007petri}. In particular, mathematical theories can be applied to ensure conformance with design criteria. Their main use in development processes is visualization and documentation~\cite{schindler2012werkzeuginfrastruktur}\cite[p.~79]{zimmermann2007stochastic} instead of a primary design tool.
+
+Based on the MontiCore Language Workbench~\cite{rumpe2017monticore}, we propose the textual modeling language \emph{petrinets4analysis}: In conjunction with an analysis toolkit, it enables the use of petri nets as core elements of the design process. This allows the automatic and continuous verification of models as they evolve, in particular to detect modeling errors as early as possible. Thereby, in the future, use for code generation is imaginable. With restricted and intuitive syntax, \emph{petrinets4analysis} is a domain-specific language (DSL) that is easily usable also by domain experts without knowledge of programming~\cite{karsai2014design}.
+
+Suppose, for instance, that a simple embedded device is described by the petri net in Figure~\ref{fig:intro:example}. This petri net allows the device to create objects whenever idle, and write them to the disk once finished. Objects on the disk can be deleted afterwards. This device's disk could easily overflow! (The net is \emph{unbounded}, which we define formally in Section~\ref{sec:background:properties}.) In more complex nets, errors like this might be harder to detect. We provide our tool with the source code in Listing~\ref{lst:intro:example} which is the textual description in the \emph{petrinets4analysis} language, describing places (l. 4-6) and transitions (l. 8-16) of the net. Due to the assertion of boundedness (l. 2), our toolkit would alert the user to her modeling mistake; a simple change leads to the correction in Figure~\ref{fig:intro:example2} where a reservoir of ``disk space'' limits the number of objects written.
+
+\begin{figure}[htb]
+	\centering
+	\begin{minipage}{0.45\textwidth}
+		\begin{tikzpicture}
+			\node [place,label=above:memory] (mem) {};
+			\node [place,tokens=1,below of=mem,label=below:idle] (idle) {};
+			\node [transition,left of=mem,label=right:create,rotate=90] (create) {}
+				edge[pre,bend right=45] (idle) edge[post] (mem);
+			\node [place,right=2cm of mem,label=above:disk] (disk) {};
+			\node [transition,right of=mem,label=right:write,rotate=90] (write) {}
+				edge[pre] (mem) edge[post,bend left=45] (idle) edge[post] (disk);
+			\node [transition,right of=disk,label=right:delete,rotate=90] (del) {}
+				edge[pre] (disk);
+		\end{tikzpicture}
+		\caption{A simple, unbounded petri net. For a more detailed explanation, we refer to Section~\ref{sec:background}.}\label{fig:intro:example}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.45\textwidth}
+		\begin{tikzpicture}
+			\node [place,label=above:memory] (mem) {};
+			\node [place,tokens=1,below of=mem,label=below:idle] (idle) {};
+			\node [transition,left of=mem,label=right:create,rotate=90] (create) {}
+				edge[pre,bend right=45] (idle) edge[post] (mem);
+			\node [place,right=2cm of mem,label=above:disk] (disk) {};
+			\node [place,below of=disk,tokens=3,label=below:disk space] (space) {};
+			\node [transition,right of=mem,label=right:write,rotate=90] (write) {}
+				edge[pre] (mem) edge[post,bend left=40] (idle) edge[post] (disk) edge[pre,bend right=40] (space);
+			\node [transition,right of=disk,label=right:delete,rotate=90] (del) {}
+				edge[pre] (disk) edge[post,bend left=45] (space);
+		\end{tikzpicture}
+		\caption{A place has been added to the petri net in Figure~\ref{fig:intro:example} to make it bounded.}\label{fig:intro:example2}
+	\end{minipage}
+\end{figure}
+
+\begin{lstfloat}
+	\centering
+\begin{lstlisting}[style=petrinet]
+petrinet Processing {
+	assert bounded;         // checks the net for boundedness
+	                        // an error is thrown, because it is unbounded
+	place memory;        
+	place idle initial 1;   // places are slots where tokens are stored
+	place disk;             // at start of execution, "idle" contains 1 token
+	
+	transition create:      // transitions move tokens between places
+		1 <- idle           // this edge removes one token from "idle"
+		1 -> memory         // and one token is put into "memory"
+	transition write:
+		1 <- memory
+		1 -> disk
+		1 -> idle
+	transition delete:
+		1 <- disk
+}
+\end{lstlisting}
+	\caption{petrinets4analysis code for the model in Figure~\ref{fig:intro:example}}\label{lst:intro:example}
+\end{lstfloat}
+
+After reviewing theoretical foundations in Section~\ref{sec:background}, we describe our language design in Section~\ref{sec:language} and discuss selected implementation details in Section~\ref{sec:implementation}.
+
+\subsubsection{Related Work}
+
+Clearly, both textual descriptions for modeling artifacts---including petri nets---and their analysis are not new. For instance, Barros and Gomes~\cite{barros2007use} discuss the merits of defining a new language versus adding syntax to an existing one. They propose an extension of Ruby syntax to support composition, addition, and refinement. Similarly, Varpaaniemi et al.~\cite{varpaaniemi1995prod} describe a specification language for Pr/T nets (similar in nature to petri nets) on top of the C language preprocessor, which in turn generates a reachability analysis tool.
+
+With these approaches, developers have access to the power of the underlying language (e.g. C), allowing the use of existing macros, expressions, libraries and development environments. On the other hand, specifically designed languages may be easier for domain experts to learn and apply due to their restricted and intuitive syntax~\cite{karsai2014design}. Through the use of MontiCore~\cite{rumpe2017monticore}, we are able to design such a language without the overhead of creating a parser and infrastructure from scratch, one of the drawbacks identified by Barros and Gomes~\cite{barros2007use}.
+
+MontiCore has been used previously to design other DSLs for modeling processes. In particular, UML/P~\cite{schindler2012werkzeuginfrastruktur} is a powerful formalization of the popular Unified Modeling Language that can be used both for verification and code generation, also targeting the modeling and design phases. Our work expands on this idea by targeting petri nets, hence covering another artifact type.
+
+On the other hand, Matcovschi et al.~\cite{matcovschi2003petri} provide a toolbox for the MATLAB environment that implements many behavioral and structural analyses for graphical petri net models. Its focus is not on language design but on ease of use for designing and analyzing nets through a graphical interface. However, models can easily become too large for graphical editors, while textual representations are more easily built from multiple components~\cite{barros2007use}.
+
+While the capabilities of \emph{petrinets4analysis} are severely restricted in comparison with state-of-the-art tools, it serves as a proof of concept for intuitive domain-specific, textual modeling languages which can more easily be integrated into a development process. Our main focus is on the use of the MontiCore Language Workbench~\cite{rumpe2017monticore} to design such a language with minimal effort, and hence its increased maintainability and extensibility.

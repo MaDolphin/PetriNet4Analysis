@@ -1,0 +1,8 @@
+petrinet SelfLoopTransition1 {
+
+    place p_in_1;
+    place p_in_2;
+    place p;
+    place p_out_1;
+    place p_out_2;
+}

@@ -1,0 +1,6 @@
+petrinet AssertAfterCode {
+
+    place P;
+
+    assert live;
+}

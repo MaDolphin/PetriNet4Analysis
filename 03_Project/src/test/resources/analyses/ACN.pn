@@ -1,0 +1,21 @@
+petrinet ACN {
+    // https://www7.in.tum.de/~esparza/fcbook-middle.pdf
+    // asymmetric-choice net
+
+    place s1;
+    place s2;
+    place s3;
+
+    transition t1:
+    1 <- s1
+    1 <- s2
+
+    transition t2:
+    1 <- s1
+    1 <- s2
+
+    transition t3:
+    1 <- s2
+    1 <- s3
+
+}

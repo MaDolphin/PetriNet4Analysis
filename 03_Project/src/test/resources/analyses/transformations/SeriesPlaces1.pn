@@ -1,0 +1,27 @@
+petrinet SeriesPlaces1 {
+
+    place p_in;
+    place p_out;
+
+    transition t_in_1:
+        1 -> p_in
+
+    transition t_in_2:
+        1 -> p_in
+
+    transition t:
+        1 <- p_in
+        1 -> p_out
+
+    transition t_out_1:
+        1 -> p_out
+
+    transition t_out_2:
+        1 -> p_out
+
+    transition t_out_3:
+        1 <- p_out
+
+    transition t_out_4:
+        1 <- p_out
+}

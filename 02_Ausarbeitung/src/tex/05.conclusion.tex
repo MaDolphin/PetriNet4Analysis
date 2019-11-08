@@ -1,0 +1,11 @@
+% TeX root = ../../paper.tex
+
+\section{Conclusion}
+
+Petri nets are a popular tool for modeling, visualizing and analyzing processes, especially in asynchronous or non-deterministic settings. With the textual modeling language \emph{petrinets4analysis}, we support the use of petri nets in the design process enabled by the automatic and continuous verification of models. This helps to detect modeling errors as early as possible. Moreover, the restricted and intuitive syntax of our DSL has the advantage that it can also be used by non-programmers~\cite{karsai2014design}.
+
+We implement methods for analyzing the petri nets regarding properties like liveness or boundedness through evaluation of the coverability tree, as well as transformations which reduce the complexity of petri nets by eliminating places or transitions and hence decrease computation time for subsequent tasks.
+
+With the help of visitors, the tool can output petri nets in different formats: we produce both a syntactically correct model of the \emph{petrinets4analysis} language following common formatting guidelines, as well as a graph representation in the \emph{Dot} language~\cite{gansner2000open} for further processing and visualisation.
+
+The MontiCore Language Workbench~\cite{rumpe2017monticore} on which the \emph{petrinets4analysis} tool is based allows us to design the language and toolkit with minimal effort. From a context-free grammar defining the syntax for petri net models, we obtain a parser as well as Java code and infrastructure for AST processing and contextual verification through cocos. While similar (and more powerful) tools for petri net processing exist, our tool proves the efficiency of using a language workbench such as MontiCore, resulting in a small handwritten codebase of language-specific additions, a fact that greatly benefits maintainability and extensibility.

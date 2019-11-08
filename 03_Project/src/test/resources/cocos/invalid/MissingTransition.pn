@@ -1,0 +1,10 @@
+petrinet MissingTransition {
+
+    assert l1live(T);
+
+    place P;
+
+    transition S:
+        1 <- P
+        1 -> P
+}

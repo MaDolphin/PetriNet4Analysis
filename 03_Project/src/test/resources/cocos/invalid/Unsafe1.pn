@@ -1,0 +1,30 @@
+petrinet Unsafe1 {
+
+    assert bounded;
+    assert safe;
+
+    place H2 initial 1;
+    place O2 initial 1;
+    place H2O;
+    place H2O2;
+    place O;
+
+    transition Knallgas:
+        2 <- H2
+        1 <- O2
+        2 -> H2O
+
+    transition SplitOxygen:
+        1 <- O2
+        2 -> O
+
+    transition Catalase:
+        2 <- H2O2
+        2 -> H2O
+        1 -> O2
+
+    transition Electrolysis:
+        2 <- H2O
+        2 -> H2
+        1 -> O2
+}
