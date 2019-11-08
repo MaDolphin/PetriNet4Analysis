@@ -1,0 +1,21 @@
+petrinet ParallelTransitions1 {
+
+    place p_in_1;
+    place p_in_2;
+    place p_in_3;
+    place p_in_4;
+    place p_in;
+    place p_out;
+    place p_out_1;
+    place p_out_2;
+    place p_out_3;
+    place p_out_4;
+
+    transition t1:
+        1 <- p_in
+        1 -> p_out
+
+    transition t2:
+        1 <- p_in
+        1 -> p_out
+}

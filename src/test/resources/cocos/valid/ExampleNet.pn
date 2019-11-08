@@ -1,0 +1,23 @@
+petrinet ExampleNet {
+
+    // assert live;
+
+    place Start initial 1;
+    place Next;
+
+    transition forward:
+        1 <- Start
+        1 -> Next
+        2 -> Collect
+
+    transition back:
+        1 <- Next
+        1 -> Start
+
+    transition doNothing:
+        1 <- Start
+        1 -> Start
+
+    // make sure places are resolved even if after transitions
+    place Collect;
+}

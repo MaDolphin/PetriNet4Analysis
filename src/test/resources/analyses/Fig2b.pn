@@ -1,0 +1,25 @@
+petrinet Fig2b {
+
+    place P1 initial 1;
+    place P1_ initial 1;
+    place P2;
+    place P2_ initial 1;
+
+    transition T1:
+        1 <- P1_
+        1 -> P1
+
+    transition T2:
+        2 <- P1
+        2 -> P1_
+
+    transition T3:
+        2 <- P1
+        1 <- P2_
+        1 -> P2
+        2 -> P1_
+
+    transition T4:
+        1 <- P2
+        1 -> P2_
+}

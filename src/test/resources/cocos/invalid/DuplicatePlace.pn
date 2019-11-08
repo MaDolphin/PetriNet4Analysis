@@ -1,0 +1,12 @@
+petrinet H2O {
+
+    place H2 initial 1;
+    place O2;
+    place H2O;
+    place O2 initial 1;
+
+    transition t:
+        2 <- H2
+        1 <- O2
+        2 <- H2O
+}

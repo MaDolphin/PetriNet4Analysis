@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="55.0" y="990.0">petrinet._ast.ASTGlobalRequirementTOP</node>
+    <node x="492.25" y="990.0">petrinet._ast.ASTSubclassRequirementTOP</node>
+    <node x="1425.9916666666666" y="288.0">petrinet._ast.ASTEdgeTOP</node>
+    <node x="614.9166666666666" y="894.0">petrinet._ast.ASTSubclass</node>
+    <node x="910.2191711278541" y="990.0">petrinet._ast.ASTLivenessTOP</node>
+    <node x="1162.560372261326" y="546.0">petrinet._ast.ASTTransition</node>
+    <node x="10.5" y="894.0">petrinet._ast.ASTGlobalFeature</node>
+    <node x="1139.9166666666665" y="778.0">petrinet._ast.ASTTransitionReferenceTOP</node>
+    <node x="1412.7416666666666" y="692.0">petrinet._ast.ASTEdge</node>
+    <node x="1417.8940054856082" y="778.0">petrinet._ast.ASTEdgeBuilder</node>
+    <node x="4.850000000000023" y="1086.0">petrinet._ast.ASTGlobalRequirement</node>
+    <node x="1299.9166666666665" y="172.0">petrinet._ast.ASTPlace</node>
+    <node x="758.9166666666665" y="894.0">petrinet._ast.ASTLivenessLevel</node>
+    <node x="269.5000000000001" y="692.0">petrinet._ast.ASTPetrinetTOP</node>
+    <node x="327.25" y="894.0">petrinet._ast.ASTRequirement</node>
+    <node x="509.58333333333326" y="1086.0">petrinet._ast.ASTSubclassRequirement</node>
+    <node x="1222.6666666666665" y="0.0">petrinet._ast.ASTFromEdge</node>
+    <node x="1122.6511483427512" y="450.0">petrinet._ast.ASTTransitionTOP</node>
+    <node x="430.6191711278542" y="778.0">petrinet._ast.ASTPetrinet</node>
+    <node x="739.3273388189415" y="778.0">petrinet._ast.ASTConstantsPetrinet</node>
+    <node x="887.926313984997" y="1086.0">petrinet._ast.ASTLiveness</node>
+    <node x="1207.84489607085" y="364.0">petrinet._ast.ASTToEdge</node>
+    <node x="936.9166666666665" y="894.0">petrinet._ast.PetrinetLiterals</node>
+    <node x="1114.9166666666665" y="894.0">petrinet._ast.ASTTransitionReference</node>
+    <node x="282.0" y="990.0">petrinet._ast.ASTAssertion</node>
+    <node x="1253.4166666666665" y="96.0">petrinet._ast.ASTPlaceTOP</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="petrinet._ast.ASTPetrinetTOP" target="petrinet._ast.ASTPetrinet">
+      <point x="57.60000000000002" y="13.0" />
+      <point x="399.10000000000014" y="738.0" />
+      <point x="474.54774255642565" y="738.0" />
+      <point x="-17.571428571428555" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTSubclassRequirementTOP" target="petrinet._ast.ASTSubclassRequirement">
+      <point x="73.66666666666674" y="13.0" />
+      <point x="676.4166666666667" y="1066.0" />
+      <point x="649.5833333333333" y="1066.0" />
+      <point x="40.0" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTGlobalRequirement" target="petrinet._ast.ASTPetrinet">
+      <point x="-74.40000000000009" y="-13.0" />
+      <point x="23.449999999999932" y="1066.0" />
+      <point x="0.0" y="1066.0" />
+      <point x="0.0" y="824.0" />
+      <point x="442.91917112785416" y="824.0" />
+      <point x="-49.200000000000045" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLivenessTOP" target="petrinet._ast.ASTRequirement">
+      <point x="-57.599999999999994" y="-13.0" />
+      <point x="924.6191711278541" y="960.0" />
+      <point x="456.85" y="960.0" />
+      <point x="57.60000000000002" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransitionReference" target="petrinet._ast.ASTTransitionReferenceTOP">
+      <point x="-25.0" y="-13.0" />
+      <point x="1189.9166666666665" y="874.0" />
+      <point x="1176.7499999999998" y="874.0" />
+      <point x="-73.66666666666667" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinet" target="petrinet._ast.ASTTransition">
+      <point x="52.71428571428578" y="-13.0" />
+      <point x="544.83345684214" y="758.0" />
+      <point x="593.9703616040447" y="758.0" />
+      <point x="593.9703616040447" y="662.0" />
+      <point x="1196.810372261326" y="662.0" />
+      <point x="-34.25" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTSubclassRequirement" target="petrinet._ast.ASTPetrinet">
+      <point x="-80.0" y="-13.0" />
+      <point x="529.5833333333333" y="1066.0" />
+      <point x="481.75" y="1066.0" />
+      <point x="481.75" y="854.0" />
+      <point x="516.7191711278542" y="854.0" />
+      <point x="24.600000000000023" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransition" target="petrinet._ast.ASTTransitionTOP">
+      <point x="-39.14285714285711" y="-13.0" />
+      <point x="1191.917515118469" y="516.0" />
+      <point x="1148.9844816760844" y="516.0" />
+      <point x="-52.66666666666663" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransitionTOP" target="petrinet._ast.ASTFromEdge">
+      <point x="-59.25" y="-13.0" />
+      <point x="1142.4011483427512" y="410.0" />
+      <point x="1175.11989607085" y="410.0" />
+      <point x="1175.11989607085" y="66.0" />
+      <point x="1256.8333333333333" y="66.0" />
+      <point x="-27.33333333333337" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransition" target="petrinet._ast.ASTEdge">
+      <point x="61.64999999999998" y="13.0" />
+      <point x="1292.710372261326" y="622.0" />
+      <point x="1436.4916666666666" y="622.0" />
+      <point x="-23.75" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLiveness" target="petrinet._ast.ASTTransition">
+      <point x="52.71428571428572" y="-13.0" />
+      <point x="1002.1405996992828" y="1066.0" />
+      <point x="1400.9916666666666" y="1066.0" />
+      <point x="1400.9916666666666" y="652.0" />
+      <point x="1251.6103722613261" y="652.0" />
+      <point x="20.549999999999955" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTGlobalRequirement" target="petrinet._ast.ASTGlobalRequirementTOP">
+      <point x="0.0" y="-13.0" />
+      <point x="97.85000000000002" y="1066.0" />
+      <point x="89.5" y="1066.0" />
+      <point x="-69.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinet" target="petrinet._ast.ASTPlace">
+      <point x="17.571428571428555" y="-13.0" />
+      <point x="509.69059969928276" y="758.0" />
+      <point x="518.0120282707114" y="758.0" />
+      <point x="518.0120282707114" y="238.0" />
+      <point x="1323.0984848484848" y="238.0" />
+      <point x="-27.81818181818187" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLivenessTOP" target="petrinet._ast.ASTLiveness">
+      <point x="48.0" y="13.0" />
+      <point x="1030.2191711278542" y="1046.0" />
+      <point x="966.9977425564256" y="1046.0" />
+      <point x="17.571428571428555" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransitionReference" target="petrinet._ast.ASTTransition">
+      <point x="-75.0" y="-13.0" />
+      <point x="1139.9166666666665" y="874.0" />
+      <point x="1070.8273388189416" y="874.0" />
+      <point x="1070.8273388189416" y="672.0" />
+      <point x="1210.5103722613262" y="672.0" />
+      <point x="-20.549999999999955" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinet" target="petrinet._ast.ASTAssertion">
+      <point x="-24.600000000000023" y="13.0" />
+      <point x="467.5191711278542" y="834.0" />
+      <point x="316.75" y="834.0" />
+      <point x="316.75" y="950.0" />
+      <point x="347.0" y="950.0" />
+      <point x="0.0" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTFromEdge" target="petrinet._ast.ASTEdgeTOP">
+      <point x="41.0" y="13.0" />
+      <point x="1325.1666666666665" y="56.0" />
+      <point x="1492.3523388189415" y="56.0" />
+      <point x="1492.3523388189415" y="268.0" />
+      <point x="1522.6583333333333" y="268.0" />
+      <point x="38.66666666666674" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTGlobalRequirementTOP" target="petrinet._ast.ASTRequirement">
+      <point x="69.0" y="-13.0" />
+      <point x="227.5" y="970.0" />
+      <point x="341.65" y="970.0" />
+      <point x="-57.60000000000002" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPlace" target="petrinet._ast.ASTFromEdge">
+      <point x="38.25" y="-13.0" />
+      <point x="1389.1666666666665" y="152.0" />
+      <point x="1386.9166666666665" y="152.0" />
+      <point x="1386.9166666666665" y="66.0" />
+      <point x="1311.5" y="66.0" />
+      <point x="27.333333333333258" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLivenessLevel" target="petrinet._ast.ASTConstantsPetrinet">
+      <point x="0.0" y="-13.0" />
+      <point x="837.9166666666665" y="874.0" />
+      <point x="855.5773388189415" y="874.0" />
+      <point x="23.25" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPlaceTOP" target="petrinet._ast.ASTPlace">
+      <point x="49.200000000000045" y="13.0" />
+      <point x="12.75" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinet" target="petrinet._ast.ASTPetrinetTOP">
+      <point x="-52.714285714285666" y="-13.0" />
+      <point x="439.40488541356854" y="758.0" />
+      <point x="341.5000000000001" y="758.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTEdge" target="petrinet._ast.ASTTransition">
+      <point x="-33.25" y="-13.0" />
+      <point x="1426.9916666666666" y="632.0" />
+      <point x="1279.0103722613262" y="632.0" />
+      <point x="47.950000000000045" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTSubclass" target="petrinet._ast.ASTConstantsPetrinet">
+      <point x="0.0" y="-13.0" />
+      <point x="676.4166666666666" y="874.0" />
+      <point x="809.0773388189415" y="874.0" />
+      <point x="-23.25" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPlace" target="petrinet._ast.ASTPlaceTOP">
+      <point x="-38.25" y="-13.0" />
+      <point x="1312.6666666666665" y="152.0" />
+      <point x="1314.9166666666665" y="152.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTFromEdge" target="petrinet._ast.ASTEdge">
+      <point x="54.66666666666674" y="13.0" />
+      <point x="1338.8333333333335" y="46.0" />
+      <point x="1552.4916666666666" y="46.0" />
+      <point x="1552.4916666666666" y="672.0" />
+      <point x="1502.9916666666666" y="672.0" />
+      <point x="42.75" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLiveness" target="petrinet._ast.ASTPetrinet">
+      <point x="-52.71428571428572" y="-13.0" />
+      <point x="896.7120282707112" y="1066.0" />
+      <point x="748.4166666666665" y="1066.0" />
+      <point x="748.4166666666665" y="854.0" />
+      <point x="541.3191711278542" y="854.0" />
+      <point x="49.200000000000045" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPlace" target="petrinet._ast.ASTTransition">
+      <point x="0.0" y="13.0" />
+      <point x="1350.9166666666665" y="268.0" />
+      <point x="1341.126148342751" y="268.0" />
+      <point x="1341.126148342751" y="526.0" />
+      <point x="1289.7746579756117" y="526.0" />
+      <point x="58.71428571428578" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTEdgeTOP" target="petrinet._ast.ASTPlace">
+      <point x="0.0" y="-13.0" />
+      <point x="1483.9916666666666" y="238.0" />
+      <point x="1388.0075757575755" y="238.0" />
+      <point x="37.09090909090901" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransition" target="petrinet._ast.ASTPlace">
+      <point x="39.14285714285711" y="-13.0" />
+      <point x="1270.2032294041833" y="516.0" />
+      <point x="1330.126148342751" y="516.0" />
+      <point x="1330.126148342751" y="258.0" />
+      <point x="1341.6439393939395" y="258.0" />
+      <point x="-9.272727272727252" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPlaceTOP" target="petrinet._ast.ASTToEdge">
+      <point x="-49.200000000000045" y="13.0" />
+      <point x="1265.7166666666667" y="142.0" />
+      <point x="1237.71989607085" y="142.0" />
+      <point x="1237.71989607085" y="339.0" />
+      <point x="1221.46989607085" y="339.0" />
+      <point x="-40.875" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLiveness" target="petrinet._ast.ASTLivenessTOP">
+      <point x="-17.571428571428555" y="-13.0" />
+      <point x="931.8548854135685" y="1066.0" />
+      <point x="934.2191711278541" y="1066.0" />
+      <point x="-48.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPlaceTOP" target="petrinet._ast.ASTFromEdge">
+      <point x="-30.75" y="-13.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTEdgeBuilder" target="petrinet._ast.ASTPlace">
+      <point x="36.0" y="-13.0" />
+      <point x="1525.8940054856082" y="758.0" />
+      <point x="1565.6166666666666" y="758.0" />
+      <point x="1565.6166666666666" y="228.0" />
+      <point x="1397.280303030303" y="228.0" />
+      <point x="46.36363636363649" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTGlobalRequirementTOP" target="petrinet._ast.ASTGlobalRequirement">
+      <point x="69.0" y="13.0" />
+      <point x="227.5" y="1066.0" />
+      <point x="172.2500000000001" y="1066.0" />
+      <point x="74.40000000000009" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTSubclassRequirementTOP" target="petrinet._ast.ASTSubclass">
+      <point x="0.0" y="-13.0" />
+      <point x="602.75" y="970.0" />
+      <point x="635.4166666666666" y="970.0" />
+      <point x="-41.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTEdge" target="petrinet._ast.ASTEdgeTOP">
+      <point x="33.25" y="-13.0" />
+      <point x="1493.4916666666666" y="662.0" />
+      <point x="1515.7416666666666" y="662.0" />
+      <point x="1515.7416666666666" y="339.0" />
+      <point x="1527.4916666666666" y="339.0" />
+      <point x="43.5" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransition" target="petrinet._ast.ASTToEdge">
+      <point x="19.571428571428555" y="-13.0" />
+      <point x="1250.6318008327546" y="506.0" />
+      <point x="1303.0261483427512" y="506.0" />
+      <point x="1303.0261483427512" y="430.0" />
+      <point x="1284.1448960708499" y="430.0" />
+      <point x="21.799999999999955" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransitionTOP" target="petrinet._ast.ASTTransition">
+      <point x="52.6666666666666" y="13.0" />
+      <point x="1254.3178150094177" y="496.0" />
+      <point x="1231.060372261326" y="496.0" />
+      <point x="0.0" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTSubclassRequirement" target="petrinet._ast.ASTSubclass">
+      <point x="80.0" y="-13.0" />
+      <point x="689.5833333333333" y="1066.0" />
+      <point x="730.5833333333333" y="1066.0" />
+      <point x="730.5833333333333" y="970.0" />
+      <point x="717.4166666666666" y="970.0" />
+      <point x="41.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTEdgeBuilder" target="petrinet._ast.ASTEdge">
+      <point x="-36.0" y="-13.0" />
+      <point x="1453.8940054856082" y="758.0" />
+      <point x="1460.2416666666666" y="758.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.PetrinetLiterals" target="petrinet._ast.ASTConstantsPetrinet">
+      <point x="0.0" y="-13.0" />
+      <point x="1015.9166666666665" y="874.0" />
+      <point x="902.0773388189415" y="874.0" />
+      <point x="69.75" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTToEdge" target="petrinet._ast.ASTEdge">
+      <point x="43.60000000000002" y="13.0" />
+      <point x="1305.94489607085" y="420.0" />
+      <point x="1356.7690054856082" y="420.0" />
+      <point x="1356.7690054856082" y="612.0" />
+      <point x="1445.9916666666666" y="612.0" />
+      <point x="-14.25" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransition" target="petrinet._ast.ASTFromEdge">
+      <point x="-58.714285714285666" y="-13.0" />
+      <point x="1172.3460865470404" y="526.0" />
+      <point x="1112.1511483427512" y="526.0" />
+      <point x="1112.1511483427512" y="56.0" />
+      <point x="1243.1666666666665" y="56.0" />
+      <point x="-41.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinetTOP" target="petrinet._ast.ASTAssertion">
+      <point x="-28.799999999999955" y="13.0" />
+      <point x="312.70000000000016" y="758.0" />
+      <point x="305.75" y="758.0" />
+      <point x="305.75" y="960.0" />
+      <point x="321.0" y="960.0" />
+      <point x="-26.0" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLiveness" target="petrinet._ast.ASTLivenessLevel">
+      <point x="-35.14285714285714" y="-13.0" />
+      <point x="914.2834568421399" y="1056.0" />
+      <point x="887.3191711278541" y="1056.0" />
+      <point x="887.3191711278541" y="970.0" />
+      <point x="785.2499999999999" y="970.0" />
+      <point x="-52.666666666666686" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLiveness" target="petrinet._ast.ASTTransitionReference">
+      <point x="35.14285714285717" y="-13.0" />
+      <point x="984.5691711278541" y="1056.0" />
+      <point x="1297.235672152275" y="1056.0" />
+      <point x="1297.235672152275" y="970.0" />
+      <point x="1281.5833333333333" y="970.0" />
+      <point x="66.66666666666671" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPlace" target="petrinet._ast.ASTEdge">
+      <point x="18.545454545454504" y="13.0" />
+      <point x="1369.462121212121" y="258.0" />
+      <point x="1415.4916666666666" y="258.0" />
+      <point x="1415.4916666666666" y="592.0" />
+      <point x="1464.9916666666666" y="592.0" />
+      <point x="4.75" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinet" target="petrinet._ast.ASTToEdge">
+      <point x="35.14285714285711" y="-13.0" />
+      <point x="527.2620282707113" y="758.0" />
+      <point x="529.0120282707114" y="758.0" />
+      <point x="529.0120282707114" y="420.0" />
+      <point x="1218.74489607085" y="420.0" />
+      <point x="-43.60000000000002" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinetTOP" target="petrinet._ast.ASTTransition">
+      <point x="54.0" y="-13.0" />
+      <point x="395.5000000000001" y="652.0" />
+      <point x="1183.1103722613261" y="652.0" />
+      <point x="-47.950000000000045" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTToEdge" target="petrinet._ast.ASTEdgeTOP">
+      <point x="40.875" y="-13.0" />
+      <point x="1303.21989607085" y="339.0" />
+      <point x="1440.4916666666666" y="339.0" />
+      <point x="-43.5" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinetTOP" target="petrinet._ast.ASTPlace">
+      <point x="-18.0" y="-13.0" />
+      <point x="323.5000000000001" y="672.0" />
+      <point x="311.0000000000001" y="672.0" />
+      <point x="311.0000000000001" y="228.0" />
+      <point x="1313.8257575757575" y="228.0" />
+      <point x="-37.09090909090912" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTGlobalRequirementTOP" target="petrinet._ast.ASTGlobalFeature">
+      <point x="0.0" y="-13.0" />
+      <point x="158.5" y="970.0" />
+      <point x="142.16666666666674" y="970.0" />
+      <point x="52.66666666666674" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTGlobalRequirement" target="petrinet._ast.ASTGlobalFeature">
+      <point x="-37.200000000000045" y="-13.0" />
+      <point x="60.64999999999998" y="1056.0" />
+      <point x="27.75" y="1056.0" />
+      <point x="27.75" y="970.0" />
+      <point x="36.83333333333326" y="970.0" />
+      <point x="-52.66666666666674" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTSubclassRequirementTOP" target="petrinet._ast.ASTRequirement">
+      <point x="-73.66666666666674" y="-13.0" />
+      <point x="529.0833333333333" y="970.0" />
+      <point x="428.05000000000007" y="970.0" />
+      <point x="28.80000000000001" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLivenessTOP" target="petrinet._ast.ASTTransitionReference">
+      <point x="57.60000000000002" y="-13.0" />
+      <point x="1039.8191711278541" y="970.0" />
+      <point x="1214.9166666666665" y="970.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPetrinet" target="petrinet._ast.ASTFromEdge">
+      <point x="0.0" y="-13.0" />
+      <point x="492.1191711278542" y="748.0" />
+      <point x="507.01202827071137" y="748.0" />
+      <point x="507.01202827071137" y="46.0" />
+      <point x="1229.5" y="46.0" />
+      <point x="-54.66666666666663" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransitionReferenceTOP" target="petrinet._ast.ASTTransition">
+      <point x="-55.25" y="-13.0" />
+      <point x="1195.1666666666665" y="758.0" />
+      <point x="1244.9166666666665" y="758.0" />
+      <point x="1244.9166666666665" y="672.0" />
+      <point x="1224.210372261326" y="672.0" />
+      <point x="-6.850000000000023" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTLivenessTOP" target="petrinet._ast.ASTLivenessLevel">
+      <point x="0.0" y="-13.0" />
+      <point x="982.2191711278541" y="940.0" />
+      <point x="890.5833333333331" y="940.0" />
+      <point x="52.66666666666663" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTAssertion" target="petrinet._ast.ASTRequirement">
+      <point x="52.0" y="-13.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransitionTOP" target="petrinet._ast.ASTToEdge">
+      <point x="59.25" y="-13.0" />
+      <point x="1260.9011483427512" y="430.0" />
+      <point x="1262.34489607085" y="430.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTEdge" target="petrinet._ast.ASTPlace">
+      <point x="-4.75" y="-13.0" />
+      <point x="1455.4916666666666" y="602.0" />
+      <point x="1405.9916666666666" y="602.0" />
+      <point x="1405.9916666666666" y="268.0" />
+      <point x="1360.189393939394" y="268.0" />
+      <point x="9.272727272727252" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTRequirement" target="petrinet._ast.ASTPetrinet">
+      <point x="0.0" y="-13.0" />
+      <point x="399.25" y="844.0" />
+      <point x="492.1191711278542" y="844.0" />
+      <point x="0.0" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTEdgeTOP" target="petrinet._ast.ASTEdge">
+      <point x="-14.5" y="13.0" />
+      <point x="1469.4916666666666" y="339.0" />
+      <point x="1481.1520389279929" y="339.0" />
+      <point x="1481.1520389279929" y="642.0" />
+      <point x="1474.4916666666666" y="642.0" />
+      <point x="14.25" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTPlace" target="petrinet._ast.ASTToEdge">
+      <point x="-18.545454545454504" y="13.0" />
+      <point x="1332.371212121212" y="248.0" />
+      <point x="1259.71989607085" y="248.0" />
+      <point x="1259.71989607085" y="339.0" />
+      <point x="1275.96989607085" y="339.0" />
+      <point x="13.625" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTTransitionReferenceTOP" target="petrinet._ast.ASTTransitionReference">
+      <point x="73.66666666666669" y="13.0" />
+      <point x="1324.0833333333333" y="874.0" />
+      <point x="1289.9166666666665" y="874.0" />
+      <point x="74.99999999999997" y="-13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTSubclassRequirement" target="petrinet._ast.ASTSubclassRequirementTOP">
+      <point x="-40.0" y="-13.0" />
+      <point x="569.5833333333333" y="1056.0" />
+      <point x="529.0833333333334" y="1056.0" />
+      <point x="-73.66666666666663" y="13.0" />
+    </edge>
+    <edge source="petrinet._ast.ASTGlobalFeature" target="petrinet._ast.ASTConstantsPetrinet">
+      <point x="0.0" y="-13.0" />
+      <point x="89.5" y="864.0" />
+      <point x="762.5773388189415" y="864.0" />
+      <point x="-69.75" y="13.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.5000000000000001" x="821.9999999999998" y="547.9999999999999" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

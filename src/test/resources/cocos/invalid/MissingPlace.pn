@@ -1,0 +1,6 @@
+petrinet MissingPlace {
+    place P;
+
+    transition T:
+        1 <- Q
+}

@@ -1,0 +1,15 @@
+petrinet Fig25c {
+
+    assert extended_free_choice;
+
+    place p1;
+    place p2;
+
+    transition t1:
+        1 <- p1
+        1 <- p2
+
+    transition t2:
+        1 <- p1
+        1 <- p2
+}

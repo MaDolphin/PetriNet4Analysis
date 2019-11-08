@@ -1,0 +1,32 @@
+petrinet CookieMachine {
+    // http://www.ti.inf.uni-due.de/fileadmin/public/teaching/mod/slides/ws201112/folien-2x2.pdf
+    // Example for a bounded petrinet
+
+    place Keksspeicher initial 5;
+    place Einwurfschlitz;
+    place Signal;
+    place Entnahmefach;
+    place EinwurfMoeglich initial 1;
+    place KeinSignal initial 1;
+    place Kasse;
+
+    transition MuenzeEinwerfen:
+    1 <- EinwurfMoeglich
+    1 -> Einwurfschlitz
+
+    transition t1:
+    1 <- Einwurfschlitz
+    1 <- KeinSignal
+    1 -> Signal
+    1 -> EinwurfMoeglich
+    1 -> Kasse
+
+    transition t2:
+    1 <- Keksspeicher
+    1 <- Signal
+    1 -> KeinSignal
+
+    transition SchachtelEntnehmen:
+    1 <- Entnahmefach
+
+}

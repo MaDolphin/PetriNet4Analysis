@@ -1,0 +1,35 @@
+petrinet Fig15 {
+
+    assert safe;
+    assert bounded;
+
+    place P1 initial 1;
+    place P2;
+    place P3;
+    place P4 initial 1;
+    place P5;
+    place P6;
+
+    transition T1:
+        1 <- P1
+        1 -> P2
+
+    transition T2:
+        1 <- P1
+        1 -> P5
+
+    transition T3:
+        1 <- P2
+        1 <- P3
+        1 -> P4
+
+    transition T4:
+        1 <- P4
+        1 <- P5
+        1 -> P3
+        1 -> P6
+
+    transition T5:
+        1 <- P6
+        1 -> P1
+}

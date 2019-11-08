@@ -1,0 +1,25 @@
+petrinet H2O {
+
+    assert bounded;
+    assert l1live;
+
+    place H2 initial 2;
+    place O2 initial 2;
+    place H2O;
+    place H2O2;
+
+    transition Knallgas:
+        2 <- H2
+        1 <- O2
+        2 -> H2O
+
+    transition Catalase:
+        2 <- H2O2
+        2 -> H2O
+        1 -> O2
+
+    transition Electrolysis:
+        2 <- H2O
+        2 -> H2
+        1 -> O2
+}

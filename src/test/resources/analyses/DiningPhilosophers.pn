@@ -1,0 +1,66 @@
+petrinet DiningPhilosophers {
+    // http://www.ti.inf.uni-due.de/fileadmin/public/teaching/mod/slides/ws201112/folien-2x2.pdf
+    // Deadlock reachable
+
+    place E1;
+    place W2;
+    place H1 initial 1;
+    place F1 initial 1;
+    place H2 initial 1;
+    place E2;
+    place W1;
+    place F3 initial 1;
+    place F2 initial 1;
+    place H3 initial 1;
+    place E3;
+    place W3;
+
+    transition t1:
+    1 <- W1
+    1 <- F1
+    1 -> E1
+
+    transition t2:
+    1 <- E1
+    1 -> H1
+    1 -> F1
+    1 -> F3
+
+    transition t3:
+    1 <- F1
+    1 <- H2
+    1 -> W2
+
+    transition t4:
+    1 <- W2
+    1 <- F2
+    1 -> E2
+
+    transition t5:
+    1 <- E2
+    1 -> F1
+    1 -> F2
+    1 -> H2
+
+    transition t6:
+    1 <- F2
+    1 <- H3
+    1 -> W3
+
+    transition t7:
+    1 <- H1
+    1 <- F3
+    1 -> W1
+
+    transition t8:
+    1 <- E3
+    1 -> F3
+    1 -> F2
+    1 -> H3
+
+    transition t9:
+    1 <- F3
+    1 <- W3
+    1 -> E3
+
+  }

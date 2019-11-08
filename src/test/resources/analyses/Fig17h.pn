@@ -1,0 +1,13 @@
+petrinet Fig17h {
+    place p1 initial 1;
+    place p2;
+
+    transition t1:
+    1 <- p2
+    1 -> p1
+
+    transition t2:
+    1 <- p1
+    1 -> p2
+
+}

@@ -1,0 +1,35 @@
+grammar Petrinet extends de.monticore.literals.Literals {
+
+    scope Petrinet = "petrinet" Name "{"
+        Assertion*
+        (Place | Transition)*
+    "}";
+
+    Assertion = "assert" Requirement ";";
+
+    // workarounds for features missing in MontiCore:
+    // - enum implements interface is not allowed
+    // - repetition of symbols is not allowed / does not compile
+    interface Requirement;
+    astrule Requirement = method Optional<Boolean> verify(ASTPetrinet petrinet) { };
+
+    GlobalRequirement implements Requirement = GlobalFeature;
+    enum GlobalFeature = "bounded" | "safe";
+    SubclassRequirement implements Requirement = Subclass;
+    enum Subclass = "state_machine" | "marked_graph" | "free_choice" | "extended_free_choice" | "asymmetric_choice";
+
+    Liveness implements Requirement =
+        LivenessLevel
+        ("(" ("*" | (TransitionReference || ",")+) ")")?;
+    enum LivenessLevel = "l0live" | "l1live";
+    TransitionReference = transition:Name@Transition;
+
+    symbol Place = "place" Name ("initial" initial:IntLiteral)? ";";
+    astrule Place = outEdge:FromEdge* inEdge:ToEdge*;
+
+    symbol Transition = "transition" Name ":" (FromEdge | ToEdge)*;
+
+    abstract Edge = count:IntLiteral place:Name@Place;
+    FromEdge extends Edge = count:IntLiteral "<-" place:Name@Place;
+    ToEdge extends Edge = count:IntLiteral "->" place:Name@Place;
+}

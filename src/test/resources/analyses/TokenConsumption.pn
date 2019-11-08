@@ -1,0 +1,21 @@
+petrinet TeilnetzMitMarkenkonsumption {
+    // https://d-nb.info/968575072/34
+
+    place p1 initial 1;
+    place p2;
+    place p3;
+    place p4;
+
+    transition t1:
+    1 <- p1
+    1 -> p2
+
+    transition t2:
+    1 <- p1
+    1 -> p3
+
+    transition t3:
+    1 <- p2
+    1 <- p3
+    1 -> p4
+}

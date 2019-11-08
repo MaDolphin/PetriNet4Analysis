@@ -1,0 +1,7 @@
+petrinet MissingTransitionCount {
+
+    place P;
+
+    transition T:
+        <- P
+}

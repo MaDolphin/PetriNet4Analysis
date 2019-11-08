@@ -1,0 +1,33 @@
+petrinet vendingMachine {
+    // https://www7.in.tum.de/~esparza/fcbook-middle.pdf Fig. 1.2
+
+    place candyStorage initial 4;
+    place readyForInsertion initial 1;
+    place holdingCoin;
+    place readyToDispense;
+    place requestForRefill;
+
+    transition refill:
+    1 <- requestForRefill
+    1 -> candyStorage
+
+    transition dispenseCandy:
+    1 <- candyStorage
+    1 <- readyToDispense
+    1 -> readyForInsertion
+    1 -> requestForRefill
+
+    transition rejectCoin:
+    1 <- holdingCoin
+    1 -> readyForInsertion
+
+    transition insertCoin:
+    1 <- readyForInsertion
+    1 -> holdingCoin
+
+    transition acceptCoin:
+    1 <- holdingCoin
+    1 -> readyToDispense
+
+}
+

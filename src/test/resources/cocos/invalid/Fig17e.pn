@@ -1,0 +1,28 @@
+petrinet Fig17e {
+
+    assert bounded;
+
+    place P1;
+    place P2;
+    place P3 initial 1;
+    place P4 initial 1;
+    place P5;
+
+    transition T1:
+        1 <- P2
+        1 -> P3
+
+    transition T2:
+        1 <- P3
+        1 -> P1
+        1 -> P2
+
+    transition T3:
+        1 <- P1
+        1 <- P4
+        1 -> P5
+
+    transition T4:
+        1 <- P5
+        1 -> P4
+}

@@ -1,0 +1,17 @@
+petrinet Fig25b {
+
+    assert marked_graph;
+
+    place p1;
+    place p2;
+
+    transition t1:
+        1 -> p1
+        1 -> p2
+
+    transition t2:
+        1 <- p1
+
+    transition t3:
+        1 <- p2
+}

@@ -1,0 +1,50 @@
+petrinet ParallelPlaces1 {
+
+    place p_in_1;
+    place p_in_2;
+    place p_in_3;
+    place p_in_4;
+    place p2;
+    place p_out_1;
+    place p_out_2;
+    place p_out_3;
+    place p_out_4;
+
+    transition t_in:
+        1 <- p_in_1
+        1 <- p_in_2
+        1 -> p_in_3
+        1 -> p_in_4
+        1 -> p2
+
+    transition t_out:
+        1 <- p_out_1
+        1 <- p_out_2
+        1 <- p2
+        1 -> p_out_3
+        1 -> p_out_4
+
+    transition pt_in_1:
+        1 -> p_in_1
+
+    transition pt_in_2:
+        1 -> p_in_2
+
+    transition pt_in_3:
+        1 -> p_in_3
+
+    transition pt_in_4:
+        1 -> p_in_4
+
+    transition pt_out_1:
+        1 <- p_out_1
+
+    transition pt_out_2:
+        1 <- p_out_2
+
+    transition pt_out_3:
+        1 <- p_out_3
+
+    transition pt_out_4:
+        1 <- p_out_4
+}

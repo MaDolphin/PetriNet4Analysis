@@ -1,0 +1,15 @@
+petrinet H2O {
+
+    assert l1live(*);
+    assert bounded;
+    assert l1live;
+
+    place H2 initial 2;
+    place O2 initial 2;
+    place H2O;
+
+    transition t:
+        2 <- H2
+        1 <- O2
+        2 <- H2O
+}

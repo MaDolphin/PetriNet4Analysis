@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="203.0" y="142.0">petrinet.analyses.transformations.Transformation</node>
+    <node x="0.0" y="71.0">petrinet.prettyprint.PetrinetPrettyPrinter</node>
+    <node x="0.0" y="284.0">petrinet.cocos</node>
+    <node x="0.0" y="213.0">petrinet.PetrinetsTool</node>
+    <node x="0.0" y="142.0">petrinet.analyses.CoverabilityTree</node>
+    <node x="0.0" y="0.0">petrinet.analyses.transformations.SimpleTransformations</node>
+    <node x="0.0" y="355.0">petrinet.analyses.Subclass</node>
+    <node x="147.0" y="355.0">petrinet.analyses.Liveness</node>
+    <node x="182.0" y="213.0">petrinet.analyses.Boundedness</node>
+    <node x="294.0" y="355.0">petrinet.analyses.Marking</node>
+    <node x="166.0" y="284.0">petrinet.analyses.TokenCount</node>
+    <node x="238.0" y="71.0">petrinet.prettyprint.PetrinetDotPrinter</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="401.0" y="181.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
