@@ -1,0 +1,13 @@
+# (c) https://github.com/MontiCore/monticore
+#
+image: maven:3.5.4-jdk-8-alpine
+
+masterJob:
+  script: "mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B  clean deploy --settings settings.xml"
+  only:
+    - master
+
+BranchJob:
+  script: "mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -B  clean install --settings settings.xml"
+  except:
+    - master
