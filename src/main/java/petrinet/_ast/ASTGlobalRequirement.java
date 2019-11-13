@@ -1,6 +1,6 @@
 package petrinet._ast;
 
-import petrinet.analyses.Boundedness;
+import petrinet.analysis.Boundedness;
 
 import java.util.Optional;
 

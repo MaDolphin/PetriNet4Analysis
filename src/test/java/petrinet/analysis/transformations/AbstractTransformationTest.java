@@ -1,7 +1,7 @@
-package petrinet.analyses.transformations;
+package petrinet.analysis.transformations;
 
 import petrinet._ast.ASTPetrinet;
-import petrinet.analyses.AbstractAnalysisTest;
+import petrinet.analysis.AbstractAnalysisTest;
 import petrinet.prettyprint.PetrinetPrettyPrinter;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

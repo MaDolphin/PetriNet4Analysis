@@ -1,4 +1,4 @@
-package petrinet.analyses;
+package petrinet.analysis;
 
 import de.monticore.literals.literals._ast.ASTIntLiteral;
 import petrinet._ast.*;

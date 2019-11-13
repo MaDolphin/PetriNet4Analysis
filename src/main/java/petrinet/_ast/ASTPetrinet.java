@@ -1,6 +1,6 @@
 package petrinet._ast;
 
-import petrinet.analyses.CoverabilityTree;
+import petrinet.analysis.CoverabilityTree;
 
 import java.util.List;
 import java.util.Optional;

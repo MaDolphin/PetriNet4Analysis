@@ -1,4 +1,4 @@
-package petrinet.analyses;
+package petrinet.analysis;
 
 import de.monticore.io.paths.ModelPath;
 import de.monticore.symboltable.GlobalScope;

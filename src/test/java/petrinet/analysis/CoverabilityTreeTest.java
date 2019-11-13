@@ -1,4 +1,4 @@
-package petrinet.analyses;
+package petrinet.analysis;
 
 import org.junit.jupiter.api.Test;
 import petrinet._ast.ASTPetrinet;

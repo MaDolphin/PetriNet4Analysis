@@ -1,5 +1,8 @@
 package petrinet;
 
+import de.se_rwth.commons.logging.Log;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import petrinet._ast.ASTPetrinet;
@@ -15,6 +18,16 @@ class PetrinetParserTest {
 
     private static final String valid_path = "src/test/resources/parser/valid/";
     private static final String invalid_path = "src/test/resources/parser/invalid/";
+
+    @BeforeAll
+    static void init() {
+        Log.enableFailQuick(false);
+    }
+
+    @BeforeEach
+    void setUp() {
+        Log.getFindings().clear();
+    }
 
     @ParameterizedTest
     @ValueSource(strings = {"H2O.pn", "ExampleNet.pn", "DocExample.pn", "Fig15.pn"})
@@ -34,4 +47,5 @@ class PetrinetParserTest {
         Optional<ASTPetrinet> model = new PetrinetParser().parse(invalid_path + modelName);
         assertFalse(model.isPresent());
     }
+
 }

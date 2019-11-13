@@ -2,7 +2,7 @@ package petrinet._ast;
 
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
 import de.se_rwth.commons.logging.Log;
-import petrinet.analyses.Liveness;
+import petrinet.analysis.Liveness;
 
 import java.util.List;
 import java.util.Optional;

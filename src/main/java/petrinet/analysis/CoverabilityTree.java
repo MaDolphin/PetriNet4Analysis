@@ -1,4 +1,4 @@
-package petrinet.analyses;
+package petrinet.analysis;
 
 import petrinet._ast.ASTPetrinet;
 import petrinet._ast.ASTTransition;

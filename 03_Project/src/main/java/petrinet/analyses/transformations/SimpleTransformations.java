@@ -1,4 +1,4 @@
-package petrinet.analyses.transformations;
+package petrinet.analysis.transformations;
 
 import de.monticore.io.paths.ModelPath;
 import de.monticore.literals.literals._ast.ASTIntLiteral;
