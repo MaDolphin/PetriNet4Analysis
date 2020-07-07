@@ -13,13 +13,13 @@ public class InfiniteTokenCount extends TokenCount {
     }
 
     @Override
-    void add(int other) { }
+    public void add(int other) { }
 
     @Override
-    void subtract(int other) { }
+    public void subtract(int other) { }
 
     @Override
-    InfiniteTokenCount copy() {
+    public InfiniteTokenCount copy() {
         return new InfiniteTokenCount();
     }
 

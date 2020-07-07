@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * A marking of the places in a petrinet with numbers of tokens.
  */
-class Marking {
+public class Marking {
 
     private final Map<String, TokenCount> marking = new HashMap<>();
 
@@ -21,7 +21,7 @@ class Marking {
      * Uses the initial marking to populate token counts
      * @param petrinet A petrinet with an initial marking of places
      */
-    Marking(ASTPetrinet petrinet) {
+    public Marking(ASTPetrinet petrinet) {
         for (ASTPlace place : petrinet.getPlaceList()) {
             set(place.getName(), new TokenCount(place.getInitialOpt().map(ASTIntLiteral::getValue).orElse(0)));
         }
@@ -32,7 +32,7 @@ class Marking {
      * @param place The place name of the petrinet for which to change the number of tokens
      * @param value The new number of tokens
      */
-    void set(String place, TokenCount value) {
+    public void set(String place, TokenCount value) {
         marking.put(place, value);
     }
 
@@ -41,7 +41,7 @@ class Marking {
      * @param place The place name of the petrinet for which to retrieve the number of tokens
      * @return The number of tokens in this place
      */
-    TokenCount get(String place) {
+    public TokenCount get(String place) {
         return marking.get(place);
     }
 
@@ -49,7 +49,7 @@ class Marking {
      * Retrieve all places for which a number of tokens has been stored
      * @return A {@link Set} containing the names of stored places
      */
-    Set<String> keys() {
+    public Set<String> keys() {
         return marking.keySet();
     }
 
@@ -59,7 +59,7 @@ class Marking {
      * and whose {@link Map.Entry#getValue() value} is the number of tokens there.
      * @see TokenCount#compareTo(TokenCount)
      */
-    Map.Entry<String, TokenCount> max() {
+    public Map.Entry<String, TokenCount> max() {
         if (marking.isEmpty()) {
             return new AbstractMap.SimpleEntry<>("", new TokenCount(0));
         }
@@ -70,7 +70,7 @@ class Marking {
      * Produce a new marking with exactly the same values that can be modified independently
      * @return A new marking with the same values
      */
-    Marking copy() {
+    public Marking copy() {
         Marking other = new Marking();
         keys().forEach(place -> other.set(place, get(place).copy()));
         return other;
@@ -82,7 +82,7 @@ class Marking {
      * @return {@code true} if the transition can be fired, and {@code false} otherwise
      * @see TokenCount#compareTo(int)
      */
-    boolean enabled(ASTTransition transition) {
+    public boolean enabled(ASTTransition transition) {
         return transition.getFromEdgeList().stream().allMatch(
                 edge -> get(edge.getPlace()).compareTo(edge.getCount().getValue()) >= 0
         );
@@ -92,7 +92,7 @@ class Marking {
      * Fire the given transition, updating all token counts in place
      * @param transition A transition in the petrinet, whose edges determine removed and added tokens
      */
-    void fire(ASTTransition transition) {
+    public void fire(ASTTransition transition) {
         transition.forEachFromEdges(
                 edge -> get(edge.getPlace()).subtract(edge.getCount().getValue())
         );
@@ -107,7 +107,7 @@ class Marking {
      * @return {@code true} if both markings match everywhere, and {@code false} if they are different in at least
      * one place.
      */
-    boolean equals(Marking other) {
+    public boolean equals(Marking other) {
         if (marking.size() != other.marking.size()) {
             return false;
         }

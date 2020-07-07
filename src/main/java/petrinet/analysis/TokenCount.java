@@ -3,11 +3,11 @@ package petrinet.analysis;
 /**
  * A representation of the number of tokens in a place
  */
-class TokenCount implements Comparable<TokenCount> {
+public class TokenCount implements Comparable<TokenCount> {
 
     private int value;
 
-    TokenCount(int value) {
+    public TokenCount(int value) {
         this.value = value;
     }
 
@@ -15,7 +15,7 @@ class TokenCount implements Comparable<TokenCount> {
      * Increase the number of tokens, e.g. through an incoming transition
      * @param other the number of tokens added
      */
-    void add(int other) {
+    public void add(int other) {
         value += other;
     }
 
@@ -23,7 +23,7 @@ class TokenCount implements Comparable<TokenCount> {
      * Decrease the number of tokens, e.g. through an outgoing transition
      * @param other the number of tokens removed
      */
-    void subtract(int other) {
+    public void subtract(int other) {
         if (other > value) {
             throw new UnsupportedOperationException("Not enough tokens");
         }
@@ -34,7 +34,7 @@ class TokenCount implements Comparable<TokenCount> {
      * Creates a new {@link TokenCount} with the same value that can be modified independently
      * @return a copy of the current object
      */
-    TokenCount copy() {
+    public TokenCount copy() {
         return new TokenCount(value);
     }
 
@@ -62,7 +62,7 @@ class TokenCount implements Comparable<TokenCount> {
      * @return A positive value if more than {@code other} tokens are in this place; 0 if they are equal; a negative
      * value if there are less than {@code other} tokens.
      */
-    final int compareTo(int other) {
+    public final int compareTo(int other) {
         return compareTo(new TokenCount(other));
     }
 
