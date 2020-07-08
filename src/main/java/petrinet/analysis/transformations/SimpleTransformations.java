@@ -191,13 +191,24 @@ class SimpleTransformations {
         for (Iterator<ASTPlace> iterator = transformationNet.iteratorPlaces(); iterator.hasNext(); ) {
             ASTPlace p1 = iterator.next();
             for (ASTPlace p2 : transformationNet.getPlaceList()) {
+                int p1_value;
+                int p2_value;
+                if(!p1.isPresentInitial()) {
+                    p1_value = 0;
+                }else {
+                    p1_value = p1.getInitial().getValue();
+                }
+                if(!p2.isPresentInitial()) {
+                    p2_value = 0;
+                }else {
+                    p2_value = p2.getInitial().getValue();
+                }
                 if (p1 != p2
                         && p1.sizeInEdges() == p2.sizeInEdges()
                         && p1.sizeOutEdges() == p2.sizeOutEdges()
                         && p1.streamInEdges().allMatch(in -> p2.streamInEdges().anyMatch(in::equalExceptPlace))
                         && p1.streamOutEdges().allMatch(out -> p2.streamOutEdges().anyMatch(out::equalExceptPlace))) {
-                    if (Optional.ofNullable(p1.getInitial()).map(ASTNatLiteral::getValue).orElse(0).intValue() ==
-                            Optional.ofNullable(p2.getInitial()).map(ASTNatLiteral::getValue).orElse(0).intValue()) {
+                    if (p1_value == p2_value) {
                         p1.forEachInEdges(e -> e.getTransition().removeToEdge(e));
                         p1.forEachOutEdges(e -> e.getTransition().removeFromEdge(e));
                         iterator.remove();
@@ -223,10 +234,16 @@ class SimpleTransformations {
 
         for (Iterator<ASTPlace> iterator = transformationNet.iteratorPlaces(); iterator.hasNext(); ) {
             ASTPlace p = iterator.next();
+            int p_value;
+            if(!p.isPresentInitial()) {
+                p_value = 0;
+            }else {
+                p_value = p.getInitial().getValue();
+            }
             if (p.sizeInEdges() == p.sizeOutEdges()
                     && p.streamInEdges().allMatch(in -> p.streamOutEdges().anyMatch(in::equalExceptDirection))
                     && p.streamOutEdges().map(ASTEdge::getCount).mapToInt(ASTNatLiteral::getValue).max().orElse(0)
-                        <= Optional.ofNullable(p.getInitial()).map(ASTNatLiteral::getValue).orElse(0)) {
+                        <= p_value) {
                 // special case: could become safe by removing "unsafe" place
                 if (!p.isPresentInitial() || p.getInitial().getValue() <= 1) {
                     /* if the following holds, unsafeness is also preserved: could be used for more detections
