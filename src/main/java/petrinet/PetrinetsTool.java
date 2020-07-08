@@ -3,18 +3,16 @@ package petrinet;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.ResolvingConfiguration;
-import de.monticore.symboltable.Scope;
+//import de.monticore.symboltable.GlobalScope;
+//import de.monticore.symboltable.ResolvingConfiguration;
+//import de.monticore.symboltable.Scope;
 import de.se_rwth.commons.logging.Log;
 import org.antlr.v4.runtime.RecognitionException;
 import org.slf4j.LoggerFactory;
 import petrinet._ast.*;
 import petrinet._cocos.PetrinetCoCoChecker;
 import petrinet._parser.PetrinetParser;
-import petrinet._symboltable.PetrinetLanguage;
-import petrinet._symboltable.PetrinetSymbolTableCreator;
-import petrinet._symboltable.TransitionSymbol;
+import petrinet._symboltable.*;
 import petrinet.analysis.Boundedness;
 import petrinet.analysis.Liveness;
 import petrinet.analysis.Subclass;
@@ -77,7 +75,7 @@ class PetrinetsTool {
         Log.debug(args[0] + " parsed successfully!", PetrinetsTool.class.getName());
 
         final PetrinetLanguage lang = new PetrinetLanguage();
-        Scope modelTopScope = createSymbolTable(lang, ast);
+        PetrinetArtifactScope modelTopScope = createSymbolTable(lang, ast);
 
         PetrinetCoCoChecker checker = PetrinetCoCos.getCheckerForAllCoCos();
         checker.checkAll(ast);
@@ -152,13 +150,13 @@ class PetrinetsTool {
                         }
                     } else {
                         for (String trans : args[i + 1].split(",")) {
-                            Optional<TransitionSymbol> symbol = modelTopScope.resolve(trans, TransitionSymbol.KIND);
+                            Optional<TransitionSymbol> symbol = modelTopScope.resolveTransition(trans);
                             if (!symbol.isPresent()) {
                                 Log.warn(args[i] + ": [Error " + trans + "] Transition not found in petrinet.");
                                 continue;
                             }
 
-                            Optional<ASTTransition> transitionNode = symbol.get().getTransitionNode();
+                            Optional<ASTTransition> transitionNode = Optional.ofNullable(symbol.get().getAstNode());
 
                             if (!transitionNode.isPresent()) {
                                 Log.warn(args[i] + ": [???? " + trans + "] Transition not found in petrinet, ignoring.");
@@ -203,15 +201,14 @@ class PetrinetsTool {
         return null;
     }
 
-    private static Scope createSymbolTable(PetrinetLanguage lang, ASTPetrinet ast) {
-        final ResolvingConfiguration resolverConfiguration = new ResolvingConfiguration();
-        resolverConfiguration.addDefaultFilters(lang.getResolvingFilters());
+    private static PetrinetArtifactScope createSymbolTable(PetrinetLanguage lang, ASTPetrinet ast) {
+//        final ResolvingConfiguration resolverConfiguration = new ResolvingConfiguration();
+//        resolverConfiguration.addDefaultFilters(lang.getResolvingFilters());
 
-        GlobalScope globalScope = new GlobalScope(new ModelPath(), lang, resolverConfiguration);
+        PetrinetGlobalScope globalScope = new PetrinetGlobalScope(new ModelPath(), lang);
 
-        Optional<PetrinetSymbolTableCreator> symbolTable = lang.getSymbolTableCreator(
-                resolverConfiguration, globalScope);
+        PetrinetSymbolTableCreatorDelegator symbolTable = lang.getSymbolTableCreator(globalScope);
         //noinspection OptionalGetWithoutIsPresent
-        return symbolTable.get().createFromAST(ast);
+        return symbolTable.createFromAST(ast);
     }
 }

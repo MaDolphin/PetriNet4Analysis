@@ -10,9 +10,9 @@ public class ASTSubclassRequirement extends ASTSubclassRequirementTOP {
         super();
     }
 
-    public ASTSubclassRequirement(ASTSubclass subclass) {
-        super(subclass);
-    }
+//    public ASTSubclassRequirement(ASTSubclass subclass) {
+//        super(subclass);
+//    }
 
     /**
      * Check whether this requirement is satisfied by the given petrinet.

@@ -11,9 +11,9 @@ public class ASTTransition extends ASTTransitionTOP {
         super();
     }
 
-    public ASTTransition(List<ASTFromEdge> fromEdges, List<ASTToEdge> toEdges, String name) {
-        super(fromEdges, toEdges, name);
-    }
+//    public ASTTransition(List<ASTFromEdge> fromEdges, List<ASTToEdge> toEdges, String name) {
+//        super(fromEdges, toEdges, name);
+//    }
 
     /**
      * All edges (in- and outgoing) of this transition

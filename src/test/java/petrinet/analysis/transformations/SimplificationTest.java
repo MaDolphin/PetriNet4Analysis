@@ -41,9 +41,9 @@ class SimplificationTest extends AbstractAnalysisTest {
             System.out.println(PetrinetPrettyPrinter.print(petrinet));
             System.out.println(PetrinetPrettyPrinter.print(simplified));
             for (ASTTransition t : simplified.getTransitionList()) {
-                Optional<TransitionSymbol> old = petrinet.getSpannedScope().resolve(t.getName(), TransitionSymbol.KIND);
+                Optional<TransitionSymbol> old = petrinet.getSpannedScope().resolveTransition(t.getName());
                 assertTrue(old.isPresent());
-                Optional<ASTTransition> oldNode = old.get().getTransitionNode();
+                Optional<ASTTransition> oldNode = Optional.ofNullable(old.get().getAstNode());
                 assertTrue(oldNode.isPresent());
                 assertEquals(
                         Liveness.isL1Live(petrinet.getCoverabilityTree(), oldNode.get()),

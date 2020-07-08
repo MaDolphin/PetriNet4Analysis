@@ -3,16 +3,18 @@ package petrinet.prettyprint;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import de.monticore.io.paths.ModelPath;
-import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.ResolvingConfiguration;
+//import de.monticore.symboltable.GlobalScope;
+//import de.monticore.symboltable.ResolvingConfiguration;
 import fr.lip6.move.pnml.framework.general.PnmlExport;
 import fr.lip6.move.pnml.framework.utils.ModelRepository;
 import fr.lip6.move.pnml.framework.utils.exception.InvalidIDException;
 import fr.lip6.move.pnml.framework.utils.exception.VoidRepositoryException;
 import fr.lip6.move.pnml.ptnet.hlapi.*;
 import petrinet._ast.*;
+import petrinet._symboltable.PetrinetGlobalScope;
 import petrinet._symboltable.PetrinetLanguage;
 import petrinet._symboltable.PetrinetSymbolTableCreator;
+import petrinet._symboltable.PetrinetSymbolTableCreatorDelegator;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -108,15 +110,14 @@ public class PetrinetPnmlPrinter {
     }
 
     private static void createSymbolTable(final PetrinetLanguage lang, final ASTPetrinet ast) {
-        final ResolvingConfiguration resolverConfiguration = new ResolvingConfiguration();
-        resolverConfiguration.addDefaultFilters(lang.getResolvingFilters());
+//        final ResolvingConfiguration resolverConfiguration = new ResolvingConfiguration();
+//        resolverConfiguration.addDefaultFilters(lang.getResolvingFilters());
 
-        final GlobalScope globalScope = new GlobalScope(new ModelPath(), lang, resolverConfiguration);
+        PetrinetGlobalScope globalScope = new PetrinetGlobalScope(new ModelPath(), lang);
 
-        final Optional<PetrinetSymbolTableCreator> symbolTable = lang.getSymbolTableCreator(
-                resolverConfiguration, globalScope);
+        PetrinetSymbolTableCreatorDelegator symbolTable = lang.getSymbolTableCreator(globalScope);
 
-        symbolTable.get().createFromAST(ast);
+        symbolTable.createFromAST(ast);
     }
 
 }

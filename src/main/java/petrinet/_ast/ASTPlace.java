@@ -1,6 +1,6 @@
 package petrinet._ast;
 
-import de.monticore.literals.literals._ast.ASTIntLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +13,9 @@ public class ASTPlace extends ASTPlaceTOP {
         super();
     }
 
-    public ASTPlace(List<ASTFromEdge> outEdges, List<ASTToEdge> inEdges, @SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<ASTIntLiteral> initial, String name) {
-        super(outEdges, inEdges, initial, name);
-    }
+//    public ASTPlace(List<ASTFromEdge> outEdges, List<ASTToEdge> inEdges, @SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<ASTNatLiteral> initial, String name) {
+//        super(outEdges, inEdges, initial, name);
+//    }
 
     /**
      * The set of all transitions at edges leading into this place

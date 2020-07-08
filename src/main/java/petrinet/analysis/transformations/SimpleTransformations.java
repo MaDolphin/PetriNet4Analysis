@@ -1,27 +1,32 @@
 package petrinet.analysis.transformations;
 
 import de.monticore.io.paths.ModelPath;
-import de.monticore.literals.literals._ast.ASTIntLiteral;
-import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.ResolvingConfiguration;
+import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
+//import de.monticore.symboltable.GlobalScope;
+//import de.monticore.symboltable.ResolvingConfiguration;
 import petrinet._ast.*;
+import petrinet._symboltable.PetrinetGlobalScope;
 import petrinet._symboltable.PetrinetLanguage;
 import petrinet._symboltable.PetrinetSymbolTableCreator;
+import petrinet._symboltable.PetrinetSymbolTableCreatorDelegator;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 
 class SimpleTransformations {
 
     private static final PetrinetLanguage language;
-    private static final ResolvingConfiguration resolve;
-    private static final GlobalScope globalScope;
+//    private static final ResolvingConfiguration resolve;
+    private static final PetrinetGlobalScope globalScope;
 
     static {
+//        language = new PetrinetLanguage();
+//        resolve = new ResolvingConfiguration();
+//        resolve.addDefaultFilters(language.getResolvingFilters());
+//        globalScope = new GlobalScope(new ModelPath(), language, resolve);
         language = new PetrinetLanguage();
-        resolve = new ResolvingConfiguration();
-        resolve.addDefaultFilters(language.getResolvingFilters());
-        globalScope = new GlobalScope(new ModelPath(), language, resolve);
+        globalScope = new PetrinetGlobalScope(new ModelPath(), language);
     }
 
     /**
@@ -33,7 +38,7 @@ class SimpleTransformations {
     private static ASTPetrinet copyPetrinet(ASTPetrinet petrinet) {
         ASTPetrinet copy = petrinet.deepClone();
         @SuppressWarnings("OptionalGetWithoutIsPresent")
-        PetrinetSymbolTableCreator creator = language.getSymbolTableCreator(resolve, globalScope).get();
+        PetrinetSymbolTableCreatorDelegator creator = language.getSymbolTableCreator(globalScope);
         creator.createFromAST(copy);
         copy.deriveGraphInfo();
         return copy;
@@ -49,7 +54,7 @@ class SimpleTransformations {
         if (fromPlace.isPresentInitial() && !toPlace.isPresentInitial()) {
             toPlace.setInitial(fromPlace.getInitial().deepClone());
         } else if (fromPlace.isPresentInitial() && toPlace.isPresentInitial()) {
-            toPlace.getInitial().setSource(String.valueOf(
+            toPlace.getInitial().setDigits(String.valueOf(
                     toPlace.getInitial().getValue() + fromPlace.getInitial().getValue()));
         }
     }
@@ -191,8 +196,8 @@ class SimpleTransformations {
                         && p1.sizeOutEdges() == p2.sizeOutEdges()
                         && p1.streamInEdges().allMatch(in -> p2.streamInEdges().anyMatch(in::equalExceptPlace))
                         && p1.streamOutEdges().allMatch(out -> p2.streamOutEdges().anyMatch(out::equalExceptPlace))) {
-                    if (p1.getInitialOpt().map(ASTIntLiteral::getValue).orElse(0).intValue() ==
-                            p2.getInitialOpt().map(ASTIntLiteral::getValue).orElse(0).intValue()) {
+                    if (Optional.ofNullable(p1.getInitial()).map(ASTNatLiteral::getValue).orElse(0).intValue() ==
+                            Optional.ofNullable(p2.getInitial()).map(ASTNatLiteral::getValue).orElse(0).intValue()) {
                         p1.forEachInEdges(e -> e.getTransition().removeToEdge(e));
                         p1.forEachOutEdges(e -> e.getTransition().removeFromEdge(e));
                         iterator.remove();
@@ -220,8 +225,8 @@ class SimpleTransformations {
             ASTPlace p = iterator.next();
             if (p.sizeInEdges() == p.sizeOutEdges()
                     && p.streamInEdges().allMatch(in -> p.streamOutEdges().anyMatch(in::equalExceptDirection))
-                    && p.streamOutEdges().map(ASTEdge::getCount).mapToInt(ASTIntLiteral::getValue).max().orElse(0)
-                        <= p.getInitialOpt().map(ASTIntLiteral::getValue).orElse(0)) {
+                    && p.streamOutEdges().map(ASTEdge::getCount).mapToInt(ASTNatLiteral::getValue).max().orElse(0)
+                        <= Optional.ofNullable(p.getInitial()).map(ASTNatLiteral::getValue).orElse(0)) {
                 // special case: could become safe by removing "unsafe" place
                 if (!p.isPresentInitial() || p.getInitial().getValue() <= 1) {
                     /* if the following holds, unsafeness is also preserved: could be used for more detections

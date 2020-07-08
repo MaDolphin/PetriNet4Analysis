@@ -1,6 +1,6 @@
 package petrinet.analysis;
 
-import de.monticore.literals.literals._ast.ASTIntLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
 import petrinet._ast.*;
 
 import java.util.Collections;
@@ -43,7 +43,7 @@ public class Subclass {
         return petrinet.streamTransitions()
                 .flatMap(ASTTransition::streamAllEdges)
                 .map(ASTEdge::getCount)
-                .map(ASTIntLiteral::getValue)
+                .map(ASTNatLiteral::getValue)
                 .allMatch(v -> v == 1);
     }
 

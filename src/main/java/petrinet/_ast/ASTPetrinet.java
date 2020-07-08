@@ -16,12 +16,12 @@ public class ASTPetrinet extends ASTPetrinetTOP {
         super();
     }
 
-    public ASTPetrinet(String name,
-                       List<ASTAssertion> assertions,
-                       List<ASTPlace> places,
-                       List<ASTTransition> transitions) {
-        super(name, assertions, places, transitions);
-    }
+//    public ASTPetrinet(String name,
+//                       List<ASTAssertion> assertions,
+//                       List<ASTPlace> places,
+//                       List<ASTTransition> transitions) {
+//        super(name, assertions, places, transitions);
+//    }
 
     /**
      * Compute the coverability tree for this petrinet (cf. [Mur89, V.A])

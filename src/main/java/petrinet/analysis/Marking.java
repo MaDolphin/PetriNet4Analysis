@@ -1,6 +1,6 @@
 package petrinet.analysis;
 
-import de.monticore.literals.literals._ast.ASTIntLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
 import petrinet._ast.ASTPetrinet;
 import petrinet._ast.ASTPlace;
 import petrinet._ast.ASTTransition;
@@ -23,7 +23,13 @@ public class Marking {
      */
     public Marking(ASTPetrinet petrinet) {
         for (ASTPlace place : petrinet.getPlaceList()) {
-            set(place.getName(), new TokenCount(place.getInitialOpt().map(ASTIntLiteral::getValue).orElse(0)));
+            if(!place.isPresentInitial()) {
+                set(place.getName(), new TokenCount(0));
+            }else {
+                set(place.getName(), new TokenCount(place.getInitial().getValue()));
+            }
+//            set(place.getName(), new TokenCount(place.getInitial().map(ASTNatLiteral::getValue).orElse(0)));
+
         }
     }
 

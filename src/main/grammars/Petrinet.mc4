@@ -1,4 +1,4 @@
-grammar Petrinet extends de.monticore.literals.Literals {
+grammar Petrinet extends de.monticore.literals.MCCommonLiterals {
 
     scope Petrinet = "petrinet" Name "{"
         Assertion*
@@ -26,12 +26,12 @@ grammar Petrinet extends de.monticore.literals.Literals {
 
     interface PetriNode = Name;
 
-    symbol Place implements PetriNode = "place" Name ("initial" initial:IntLiteral)? ";";
+    symbol Place implements PetriNode = "place" Name ("initial" initial:NatLiteral)? ";";
     astrule Place = outEdge:FromEdge* inEdge:ToEdge*;
 
     symbol Transition implements PetriNode = "transition" Name ":" (FromEdge | ToEdge)*;
 
-    abstract Edge = count:IntLiteral place:Name@Place;
-    FromEdge extends Edge = count:IntLiteral "<-" place:Name@Place;
-    ToEdge extends Edge = count:IntLiteral "->" place:Name@Place;
+    abstract Edge = count:NatLiteral place:Name@Place;
+    FromEdge extends Edge = count:NatLiteral "<-" place:Name@Place;
+    ToEdge extends Edge = count:NatLiteral "->" place:Name@Place;
 }
