@@ -2,6 +2,7 @@ package petrinet.cocos;
 
 import com.google.common.annotations.VisibleForTesting;
 //import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.se_rwth.commons.logging.Log;
 import petrinet._ast.ASTTransitionReference;
 import petrinet._cocos.PetrinetASTTransitionReferenceCoCo;
@@ -22,7 +23,7 @@ class TransitionReferenceSymbolsResolveCoCo implements PetrinetASTTransitionRefe
                 Log.error(error_code_none + " Transition \"" + transitionReference.getTransition() + "\" not defined in this petrinet",
                         transitionReference.get_SourcePositionStart());
             }
-        } catch (AssertionError ex) {
+        } catch (ResolvedSeveralEntriesForSymbolException ex) {
             // should be caught by NamesUniqueCoCo beforehand, but in tests we don't fail early
             Log.error(error_code_several + " Transition \"" + transitionReference.getTransition() + "\" is ambiguous due to duplicate definition",
                     transitionReference.get_SourcePositionStart());

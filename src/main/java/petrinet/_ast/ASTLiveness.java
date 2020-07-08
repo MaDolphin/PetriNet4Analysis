@@ -1,6 +1,7 @@
 package petrinet._ast;
 
 //import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.se_rwth.commons.logging.Log;
 import petrinet.analysis.Liveness;
 
@@ -36,7 +37,7 @@ public class ASTLiveness extends ASTLivenessTOP {
                 if (!verifyLiveness(petrinet, ref.getTransitionDefinition())) {
                     return Optional.of(false);
                 }
-            } catch (AssertionError ex) {
+            } catch (ResolvedSeveralEntriesForSymbolException ex) {
                 Log.error("[Liveness] Transition " + ref.getTransition() + " is ambiguous; could not verify liveness",
                         ref.get_SourcePositionStart());
             }

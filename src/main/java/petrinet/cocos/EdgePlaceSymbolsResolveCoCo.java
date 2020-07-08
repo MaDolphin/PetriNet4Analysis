@@ -2,6 +2,7 @@ package petrinet.cocos;
 
 import com.google.common.annotations.VisibleForTesting;
 //import de.monticore.symboltable.resolving.ResolvedSeveralEntriesException;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.se_rwth.commons.logging.Log;
 import petrinet._ast.ASTEdge;
 import petrinet._cocos.PetrinetASTEdgeCoCo;
@@ -22,7 +23,7 @@ class EdgePlaceSymbolsResolveCoCo implements PetrinetASTEdgeCoCo {
                 Log.error(error_code_none + " Place \"" + edgeNode.getPlace() + "\" is not defined in this petrinet",
                         edgeNode.get_SourcePositionStart());
             }
-        } catch (AssertionError ex) {
+        } catch (ResolvedSeveralEntriesForSymbolException ex) {
             // should be caught by NamesUniqueCoCo beforehand, but in tests we don't fail early
             Log.error(error_code_several + " Place \"" + edgeNode.getPlace() + "\" is ambiguous due to duplicate definition",
                     edgeNode.get_SourcePositionStart());
