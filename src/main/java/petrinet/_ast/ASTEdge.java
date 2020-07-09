@@ -26,21 +26,21 @@ public abstract class ASTEdge extends ASTEdgeTOP {
         this.transition = transition;
     }
 
-    @Override
-    public Optional<ASTPlace> getPlaceDefinitionOpt() {
-        // Monticore 5.0.2 is broken, fix symbol resolution.
-        // Upgrade breaks other stuff, in particular:
-        //   equalAttributes tries to access placeSymbol attribute of ASTEdgeTOP on an
-        //   object casted to ASTEdge, but placeSymbol is private.
-        if (!placeDefinition.isPresent()) {
-            if ((place != null) && isPresentEnclosingScope()) {
-                Optional<petrinet._symboltable.PlaceSymbol> symbol = enclosingScope.flatMap(scope -> scope.resolve(place, PlaceSymbol.KIND));
-                // flatMap instead of get; symbol might be empty.
-                placeDefinition = symbol.flatMap(PlaceSymbol::getPlaceNode);
-            }
-        }
-        return placeDefinition;
-    }
+//    @Override
+//    public Optional<ASTPlace> getPlaceDefinitionOpt() {
+//        // Monticore 5.0.2 is broken, fix symbol resolution.
+//        // Upgrade breaks other stuff, in particular:
+//        //   equalAttributes tries to access placeSymbol attribute of ASTEdgeTOP on an
+//        //   object casted to ASTEdge, but placeSymbol is private.
+//        if (!placeDefinition.isPresent()) {
+//            if ((place != null) && isPresentEnclosingScope()) {
+//                Optional<petrinet._symboltable.PlaceSymbol> symbol = enclosingScope.flatMap(scope -> scope.resolve(place, PlaceSymbol.KIND));
+//                // flatMap instead of get; symbol might be empty.
+//                placeDefinition = symbol.flatMap(PlaceSymbol::getPlaceNode);
+//            }
+//        }
+//        return placeDefinition;
+//    }
 
     /**
      * Checks whether two edges are the same but potentially a from/to pair

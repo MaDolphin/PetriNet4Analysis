@@ -10,20 +10,20 @@ public class ASTTransitionReference extends ASTTransitionReferenceTOP {
         super();
     }
 
-    public ASTTransitionReference(String transition) {
-        super(transition);
-    }
+//    public ASTTransitionReference(String transition) {
+//        super(transition);
+//    }
 
-    @Override
-    public Optional<ASTTransition> getTransitionDefinitionOpt() {
-        // Monticore is broken, fix symbol resolution. See ASTEdge comment.
-        if (!transitionDefinition.isPresent()) {
-            if ((transition != null) && isPresentEnclosingScope()) {
-                Optional<petrinet._symboltable.TransitionSymbol> symbol = enclosingScope.flatMap(scope -> scope.resolve(transition, TransitionSymbol.KIND));
-                // flatMap instead of get; symbol might be empty.
-                transitionDefinition = symbol.flatMap(TransitionSymbol::getTransitionNode);
-            }
-        }
-        return transitionDefinition;
-    }
+//    @Override
+//    public Optional<ASTTransition> getTransitionDefinitionOpt() {
+//        // Monticore is broken, fix symbol resolution. See ASTEdge comment.
+//        if (!transitionDefinition.isPresent()) {
+//            if ((transition != null) && isPresentEnclosingScope()) {
+//                Optional<petrinet._symboltable.TransitionSymbol> symbol = enclosingScope.flatMap(scope -> scope.resolve(transition, TransitionSymbol.KIND));
+//                // flatMap instead of get; symbol might be empty.
+//                transitionDefinition = symbol.flatMap(TransitionSymbol::getTransitionNode);
+//            }
+//        }
+//        return transitionDefinition;
+//    }
 }

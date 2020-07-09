@@ -6,14 +6,14 @@
 
   <groupId>de.monticore.lang</groupId>
   <artifactId>petrinets</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
 
   <properties>
     <!-- .. Libraries ..................................................... -->
 
-    <monticore.version>5.0.2</monticore.version>
+    <monticore.version>6.1.0</monticore.version>
     
-    <guava.version>28.0-jre</guava.version>
+    <guava.version>18.0</guava.version>
     <jsr305.version>3.0.2</jsr305.version>
     <junit.version>4.11</junit.version>
     <antlr.version>4.7.2</antlr.version>

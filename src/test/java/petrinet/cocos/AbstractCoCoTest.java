@@ -1,8 +1,8 @@
 package petrinet.cocos;
 
 import de.monticore.io.paths.ModelPath;
-import de.monticore.symboltable.GlobalScope;
-import de.monticore.symboltable.ResolvingConfiguration;
+//import de.monticore.symboltable.GlobalScope;
+//import de.monticore.symboltable.ResolvingConfiguration;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import org.junit.jupiter.api.AfterEach;
@@ -10,8 +10,10 @@ import org.junit.jupiter.api.BeforeAll;
 import petrinet._ast.ASTPetrinet;
 import petrinet._cocos.PetrinetCoCoChecker;
 import petrinet._parser.PetrinetParser;
+import petrinet._symboltable.PetrinetGlobalScope;
 import petrinet._symboltable.PetrinetLanguage;
 import petrinet._symboltable.PetrinetSymbolTableCreator;
+import petrinet._symboltable.PetrinetSymbolTableCreatorDelegator;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -24,15 +26,15 @@ abstract class AbstractCoCoTest {
     static final String invalid_path = "src/test/resources/cocos/invalid/";
 
     private static PetrinetLanguage language;
-    private static ResolvingConfiguration resolve;
-    private static GlobalScope globalScope;
+//    private static ResolvingConfiguration resolve;
+    private static PetrinetGlobalScope globalScope;
 
     @BeforeAll
     protected static void setGlobalScope() {
         language = new PetrinetLanguage();
-        resolve = new ResolvingConfiguration();
-        resolve.addDefaultFilters(language.getResolvingFilters());
-        globalScope = new GlobalScope(new ModelPath(), language, resolve);
+//        resolve = new ResolvingConfiguration();
+//        resolve.addDefaultFilters(language.getResolvingFilters());
+        globalScope = new PetrinetGlobalScope(new ModelPath(), language);
     }
 
     @BeforeAll
@@ -50,7 +52,7 @@ abstract class AbstractCoCoTest {
         assertTrue(petrinet.isPresent());
 
         @SuppressWarnings("OptionalGetWithoutIsPresent")
-        PetrinetSymbolTableCreator creator = language.getSymbolTableCreator(resolve, globalScope).get();
+        PetrinetSymbolTableCreatorDelegator creator = language.getSymbolTableCreator(globalScope);
         creator.createFromAST(petrinet.get());
 
         PetrinetCoCoChecker checker = PetrinetCoCos.getCheckerForAllCoCos();

@@ -10,9 +10,9 @@ public class ASTGlobalRequirement extends ASTGlobalRequirementTOP {
         super();
     }
 
-    public ASTGlobalRequirement(ASTGlobalFeature feature) {
-        super(feature);
-    }
+//    public ASTGlobalRequirement(ASTGlobalFeature feature) {
+//        super(feature);
+//    }
 
     /**
      * Check whether this requirement is satisfied by the given petrinet.

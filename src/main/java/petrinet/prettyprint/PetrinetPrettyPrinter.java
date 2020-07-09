@@ -1,6 +1,6 @@
 package petrinet.prettyprint;
 
-import de.monticore.literals.literals._ast.ASTIntLiteral;
+import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
 import de.monticore.prettyprint.CommentPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import petrinet._ast.*;
@@ -132,7 +132,7 @@ public class PetrinetPrettyPrinter extends IndentPrinter implements PetrinetInhe
     }
 
     @Override
-    public void visit(ASTIntLiteral intLiteralNode) {
+    public void visit(ASTNatLiteral intLiteralNode) {
         print(intLiteralNode.getSource());
     }
 }
