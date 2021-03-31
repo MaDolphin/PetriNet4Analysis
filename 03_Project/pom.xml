@@ -13,7 +13,7 @@
 
     <monticore.version>5.0.2</monticore.version>
     
-    <guava.version>28.0-jre</guava.version>
+    <guava.version>29.0-jre</guava.version>
     <jsr305.version>3.0.2</jsr305.version>
     <junit.version>4.11</junit.version>
     <antlr.version>4.7.2</antlr.version>
